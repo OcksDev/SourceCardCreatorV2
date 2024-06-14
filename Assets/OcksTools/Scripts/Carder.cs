@@ -34,16 +34,16 @@ public class Card
     public void Decode(string e)
     {
         var d = RandomFunctions.Instance.StringToList(e, "\n");
-        Dictionary<string,string> syus = new Dictionary<string,string>();
+        Dictionary<string, string> syus = new Dictionary<string, string>();
         foreach (string s in d)
         {
-            if(s.Contains(": "))
+            if (s.Contains(": "))
             {
-                syus.Add(s.Substring(0, s.IndexOf(": ")), s.Substring(s.IndexOf(": ")+2));
+                syus.Add(s.Substring(0, s.IndexOf(": ")), s.Substring(s.IndexOf(": ") + 2));
             }
         }
         data = DefaultValueSet();
-        foreach(var a in syus)
+        foreach (var a in syus)
         {
             if (data.ContainsKey(a.Key))
             {
@@ -54,5 +54,9 @@ public class Card
                 data.Add(a.Key, a.Value);
             }
         }
+    }
+    public string Encode()
+    {
+        return RandomFunctions.Instance.DictionaryToString(data, "\n", ": ");
     }
 }
