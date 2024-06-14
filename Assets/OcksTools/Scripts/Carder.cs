@@ -1,14 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Carder : MonoBehaviour
 {
     public List<Card> cards = new List<Card>();
+    public Card CurrentCard;
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI description;
+    public TextMeshProUGUI health;
+    public static Carder Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        cards.Add(new Card("abc: fard\nbdh: cum"));
+        cards.Add(new Card(""));
+        CurrentCard = cards[0];
+        RenderCard(CurrentCard);
+    }
+
+
+    public void RenderCard(Card cum)
+    {
+        title.text = cum.data["Name"];
+        description.text = cum.data["Description"];
+        health.text = cum.data["Health"];
     }
 
 }
@@ -16,7 +36,7 @@ public class Carder : MonoBehaviour
 
 public class Card
 {
-    Dictionary<string, string> data = new Dictionary<string, string>();
+    public Dictionary<string, string> data = new Dictionary<string, string>();
     public Card(string data)
     {
         Decode(data);

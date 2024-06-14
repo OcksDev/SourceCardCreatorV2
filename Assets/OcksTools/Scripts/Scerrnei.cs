@@ -5,6 +5,7 @@ using UnityEngine;
 public class Scerrnei : MonoBehaviour
 {
     public Camera camera;
+    public Camera maincamera;
 
 
     public int resWidth = 1038;
@@ -12,6 +13,7 @@ public class Scerrnei : MonoBehaviour
     public void TakeHiResShot()
     {
         RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
+        var e = camera.targetTexture;
         camera.targetTexture = rt;
         Texture2D screenShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
         camera.Render();
@@ -22,6 +24,9 @@ public class Scerrnei : MonoBehaviour
         Destroy(rt);
         byte[] bytes = screenShot.EncodeToPNG();
         System.IO.File.WriteAllBytes("D:\\UGameBuilds\\Sex2\\"+"a2.png", bytes);
+        if (e != null) camera.targetTexture = e;
+        maincamera.Render();
+
     }
 
     void LateUpdate()
