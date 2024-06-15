@@ -42,6 +42,7 @@ public class FileSystem : MonoBehaviour
         AssembleFilePaths();
         CreateFolder(OcksDirectry);
         CreateFolder(GameDirectory);
+        CreateFolder(GameDirectory+"/Saves");
 
         WriteFile(FileLocations[0], "", false);
         GameName = $"CardCreatorV2 {GameVer}";
@@ -218,7 +219,9 @@ public class FileSystem : MonoBehaviour
 
     public IEnumerator GetAudioClip(string fileName, int index = 0)
     {
+        DDH[index].Clip = null;
         DDH[index].ErrorLol = false;
+        DDH[index].CompletedDownload = false;
         UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(
             fileName, AudioType.MPEG);
         //Debug.Log("SexPath: "+ DirectoryLol + "/" + fileName);
@@ -240,6 +243,7 @@ public class FileSystem : MonoBehaviour
     {
         DDH[index].Texture = null;
         DDH[index].ErrorLol = false;
+        DDH[index].CompletedDownload = false;
         UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(
             fileName);
 

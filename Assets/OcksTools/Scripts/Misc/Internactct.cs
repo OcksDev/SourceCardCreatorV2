@@ -26,11 +26,18 @@ public class Internactct : MonoBehaviour
         c.CurrentCard.data["Description"] = e;
         c.RenderCard(c.CurrentCard);
     }
+    public void UpdateHealth()
+    {
+        var c = Carder.Instance;
+        var e = GetComponent<TMP_InputField>().text;
+        c.CurrentCard.data["Health"] = e;
+        c.RenderCard(c.CurrentCard);
+    }
 
     public void SaveCardToFile()
     {
         var e = Carder.Instance.CurrentCard.Encode();
-        FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "/" + Carder.Instance.CurrentCard.data["Name"] + ".txt", e, true);
+        FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "/Saves/" + Carder.Instance.CurrentCard.data["Name"] + ".txt", e, true);
 
     }
 

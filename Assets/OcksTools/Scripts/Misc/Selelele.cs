@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class Selelele : MonoBehaviour
         int i = FilePath.LastIndexOf("/");
         if(i == -1) i = FilePath.LastIndexOf("\\");
 
-        var e = FilePath.Substring(i+1);
+        var e = FilePath.Substring(i+1+"Saves\\".Length);
         i = e.LastIndexOf(".");
         e = e.Substring(0,i);
         text.text = e;
@@ -23,4 +24,9 @@ public class Selelele : MonoBehaviour
         Gamer.Instance.LoadCardFromPath(FilePath);
     }
 
+    public void KillMe()
+    {
+        File.Delete(FilePath);
+        Destroy(gameObject);
+    }
 }

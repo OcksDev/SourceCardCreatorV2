@@ -47,13 +47,14 @@ public class Card
         {
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
-            {"Health" , "10"},
+            {"Actions" , ""},
+            {"Health" , "0"},
             {"ImagePath" , ""},
         };
     }
     public void Decode(string e)
     {
-        var d = RandomFunctions.Instance.StringToList(e, "\n");
+        var d = RandomFunctions.Instance.StringToList(e, "\n<> ");
         Dictionary<string, string> syus = new Dictionary<string, string>();
         foreach (string s in d)
         {
@@ -77,6 +78,6 @@ public class Card
     }
     public string Encode()
     {
-        return RandomFunctions.Instance.DictionaryToString(data, "\n", ": ");
+        return RandomFunctions.Instance.DictionaryToString(data, "\n<> ", ": ");
     }
 }
