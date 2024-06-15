@@ -22,7 +22,7 @@ public class FileSystem : MonoBehaviour
 
 
     private static FileSystem instance;
-    public string GameFolderName = "OcksTools";
+    public string GameFolderName = "CardCreatorV2";
     private string GameName = "Ocks Tools v?";
     [HideInInspector]
     public string GameVer = "v1.1.0";
@@ -44,17 +44,12 @@ public class FileSystem : MonoBehaviour
         CreateFolder(GameDirectory);
 
         WriteFile(FileLocations[0], "", false);
-        GameName = $"Ocks Tools {GameVer}";
+        GameName = $"CardCreatorV2 {GameVer}";
         var s = ReadFile(FileLocations[0]);
         if (!s.Contains(GameName))
         {
             s += $"{GameName}\n";
             WriteFile(FileLocations[0], s, true);
-        }
-        var pp = new bool[37];
-        for(int i = 0; i < pp.Length; i++)
-        {
-            pp[i] = UnityEngine.Random.Range(0, 2) == 0 ? true:false ;
         }
     }
     private void Start()
@@ -221,7 +216,7 @@ public class FileSystem : MonoBehaviour
         return arr;
     }
 
-    IEnumerator GetAudioClip(string fileName, int index = 0)
+    public IEnumerator GetAudioClip(string fileName, int index = 0)
     {
         DDH[index].ErrorLol = false;
         UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(
@@ -241,8 +236,9 @@ public class FileSystem : MonoBehaviour
         DDH[index].CompletedDownload = true;
     }
 
-    IEnumerator GetImage(string fileName, int index = 0)
+    public IEnumerator GetImage(string fileName, int index = 0)
     {
+        DDH[index].Texture = null;
         DDH[index].ErrorLol = false;
         UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(
             fileName);
@@ -268,6 +264,6 @@ public class DownloadDataHandler
 {
     public bool ErrorLol = false;
     public bool CompletedDownload = false;
-    public Texture Texture;
-    public AudioClip Clip;
+    public Texture Texture = null;
+    public AudioClip Clip = null;
 }

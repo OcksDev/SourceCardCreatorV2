@@ -27,4 +27,11 @@ public class Internactct : MonoBehaviour
         c.RenderCard(c.CurrentCard);
     }
 
+    public void SaveCardToFile()
+    {
+        var e = Carder.Instance.CurrentCard.Encode();
+        FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "/" + Carder.Instance.CurrentCard.data["Name"] + ".txt", e, true);
+
+    }
+
 }
