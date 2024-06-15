@@ -21,6 +21,7 @@ public class Gamer : MonoBehaviour
     public GameObject SexChild2;
     public Dictionary<string, string> ValidEffects;
     public List<Cummer> cums = new List<Cummer>();
+    public List<Color32> sexex = new List<Color32>();
 
     public static Gamer Instance;
 

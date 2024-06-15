@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Carder : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class Carder : MonoBehaviour
     public TextMeshProUGUI title;
     public TextMeshProUGUI description;
     public TextMeshProUGUI health;
+    public GameObject grid1;
+    public GameObject grid2;
+    public GameObject grid3;
     public static Carder Instance;
     private void Awake()
     {
@@ -23,12 +27,139 @@ public class Carder : MonoBehaviour
         RenderCard(CurrentCard);
     }
 
+    List<Image> grid1ers= new List<Image>();
+    List<Image> grid2ers= new List<Image>();
+    List<Image> grid3ers= new List<Image>();
 
     public void RenderCard(Card cum)
     {
         title.text = cum.data["Name"];
         description.text = cum.data["Description"];
         health.text = cum.data["Health"];
+
+        bool a = false;
+        var b = RandomFunctions.Instance.StringToList(cum.data["Grid1"]);
+        foreach (var c in b)
+        {
+            if (c != "" && c != "0" && c != "3")
+            {
+                a = true;
+                break;
+            }
+        }
+        grid1.SetActive(a);
+        if (a)
+        {
+            if (grid1ers.Count < 1)
+            {
+                var w = grid1.GetComponent<Image>();
+                foreach (var c in grid1.GetComponentsInChildren<Image>())
+                {
+                    if (c != w) grid1ers.Add(c);
+                }
+            }
+            for (int i = 0; i < grid1ers.Count; i++)
+            {
+                switch (b[i])
+                {
+                    case "0":
+                        grid1ers[i].color = Gamer.Instance.sexex[0];
+                        break;
+                    case "1":
+                        grid1ers[i].color = Gamer.Instance.sexex[1];
+                        break;
+                    case "2":
+                        grid1ers[i].color = Gamer.Instance.sexex[2];
+                        break;
+                    case "3":
+                        grid1ers[i].color = Gamer.Instance.sexex[3];
+                        break;
+                }
+            }
+        }
+
+        a = false;
+        b = RandomFunctions.Instance.StringToList(cum.data["Grid2"]);
+        foreach (var c in b)
+        {
+            if (c != "" && c != "0" && c != "3")
+            {
+                a = true;
+                break;
+            }
+        }
+        grid2.SetActive(a);
+        if (a)
+        {
+            if (grid2ers.Count < 1)
+            {
+                var w = grid2.GetComponent<Image>();
+                foreach (var c in grid2.GetComponentsInChildren<Image>())
+                {
+                    if (c != w) grid2ers.Add(c);
+                }
+            }
+            for (int i = 0; i < grid2ers.Count; i++)
+            {
+                switch (b[i])
+                {
+                    case "0":
+                        grid2ers[i].color = Gamer.Instance.sexex[0];
+                        break;
+                    case "1":
+                        grid2ers[i].color = Gamer.Instance.sexex[1];
+                        break;
+                    case "2":
+                        grid2ers[i].color = Gamer.Instance.sexex[2];
+                        break;
+                    case "3":
+                        grid2ers[i].color = Gamer.Instance.sexex[3];
+                        break;
+                }
+            }
+        }
+
+        a = false;
+        b = RandomFunctions.Instance.StringToList(cum.data["Grid3"]);
+        foreach (var c in b)
+        {
+            if (c != "" && c != "0" && c != "3")
+            {
+                a = true;
+                break;
+            }
+        }
+        grid3.SetActive(a);
+        if (a)
+        {
+            if (grid3ers.Count < 1)
+            {
+                var w = grid3.GetComponent<Image>();
+                foreach (var c in grid3.GetComponentsInChildren<Image>())
+                {
+                    if (c != w) grid3ers.Add(c);
+                }
+            }
+            for (int i = 0; i < grid3ers.Count; i++)
+            {
+                switch (b[i])
+                {
+                    case "0":
+                        grid3ers[i].color = Gamer.Instance.sexex[0];
+                        break;
+                    case "1":
+                        grid3ers[i].color = Gamer.Instance.sexex[1];
+                        break;
+                    case "2":
+                        grid3ers[i].color = Gamer.Instance.sexex[2];
+                        break;
+                    case "3":
+                        grid3ers[i].color = Gamer.Instance.sexex[3];
+                        break;
+                }
+            }
+        }
+
     }
 
 }
@@ -43,6 +174,8 @@ public class Card
     }
     private Dictionary<string, string> DefaultValueSet()
     {
+        var em = RandomFunctions.Instance.ListToString(new List<string>(81));
+
         return new Dictionary<string, string>()
         {
             {"Name" , "Unnamed Card"},
@@ -50,6 +183,9 @@ public class Card
             {"Actions" , ""},
             {"Health" , "0"},
             {"ImagePath" , ""},
+            {"Grid1" , em},
+            {"Grid2" , em},
+            {"Grid3" , em},
         };
     }
     public void Decode(string e)
