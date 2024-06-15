@@ -17,7 +17,10 @@ public class Gamer : MonoBehaviour
     public Sprite spsps;
     public GameObject ParentOfSex;
     public GameObject SexChild;
+    public GameObject ParentOfSex2;
+    public GameObject SexChild2;
     public Dictionary<string, string> ValidEffects;
+    public List<Cummer> cums = new List<Cummer>();
 
     public static Gamer Instance;
 
@@ -90,6 +93,27 @@ public class Gamer : MonoBehaviour
         checks[1] = false;
         checks[2] = false;
         checks[i] = true;
+
+        switch (i)
+        {
+            case 2:
+                if(cums.Count < 4)
+                {
+                    for(int i2 = 0; i2 < 81; i2++)
+                    {
+                        var e = Instantiate(SexChild2, transform.position, transform.rotation, ParentOfSex2.transform);
+                        var s = e.GetComponent<Cummer>();
+                        s.index = i2;
+                        cums.Add(s);
+                    }
+                }
+                foreach(var e in cums)
+                {
+                    e.UpdateColor();
+                }
+                break;
+        }
+
         UpdateMenus();
     }
     public void PickFile(int i)
