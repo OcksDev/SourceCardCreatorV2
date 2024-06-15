@@ -9,11 +9,17 @@ using static System.Net.Mime.MediaTypeNames;
 public class Gamer : MonoBehaviour
 {
     public TMP_InputField imagefuiield;
+    public TMP_InputField namefuiield;
+    public TMP_InputField descfuiield;
     public UnityEngine.UI.Image sex;
     public bool[] checks = new bool[20];
     public Sprite spsps;
+
+    public static Gamer Instance;
+
     void Start()
     {
+        Instance = this;
         checks[0] = true;
         UpdateMenus();
     }
@@ -23,6 +29,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["GeneralMenu"].SetActive(checks[0]);
         Tags.refs["ActionMenu"].SetActive(checks[1]);
         Tags.refs["GridMenu"].SetActive(checks[2]);
+        Tags.refs["ImportMenu"].SetActive(checks[2]);
     }
 
     public void ToggleMenu(int i)
@@ -48,6 +55,17 @@ public class Gamer : MonoBehaviour
     {
         imagefuiield.text = e;
         UpdateImage();
+    }
+
+    public void LoadCardFromPath(string path)
+    {
+        var e = File.ReadAllText(path);
+        var card = new Card(e);
+        namefuiield.text = card.data["Name"];
+        imagefuiield.text = card.data["ImagePath"];
+        descfuiield.text = card.data["Description"];
+        Carder.Instance.CurrentCard = card;
+        Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
     }
 
     public void UpdateImage()
