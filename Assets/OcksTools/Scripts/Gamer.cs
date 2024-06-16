@@ -24,17 +24,19 @@ public class Gamer : MonoBehaviour
     public List<Color32> sexex = new List<Color32>();
 
     public static Gamer Instance;
-
-    void Start()
+    private void Awake()
     {
         Instance = this;
-        checks[0] = true;
-        UpdateMenus();
         ValidEffects = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nCommander/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00", "\r\n", "/");
-        if(!File.Exists(FileSystem.Instance.GameDirectory + "\\EffectList.txt"))
+        if (!File.Exists(FileSystem.Instance.GameDirectory + "\\EffectList.txt"))
         {
             FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\EffectList.txt", RandomFunctions.Instance.DictionaryToString(ValidEffects, "\n", ": "), true);
         }
+    }
+    void Start()
+    {
+        checks[0] = true;
+        UpdateMenus();
     }
 
 
@@ -131,8 +133,13 @@ public class Gamer : MonoBehaviour
 
     public void LoadCardFromPath(string path)
     {
-        Gamer.Instance.checks[3] = false;
         var e = File.ReadAllText(path);
+        LoadCardFromText(e);
+    }
+
+    public void LoadCardFromText(string e)
+    {
+        Gamer.Instance.checks[3] = false;
         var card = new Card(e);
         namefuiield.text = card.data["Name"];
         imagefuiield.text = card.data["ImagePath"];
@@ -140,6 +147,7 @@ public class Gamer : MonoBehaviour
         healthfuiield.text = card.data["Health"];
         Carder.Instance.CurrentCard = card;
         Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
+        GoToExclusive(0);
         UpdateImage();
         UpdateMenus();
     }

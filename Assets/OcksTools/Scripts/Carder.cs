@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +36,12 @@ public class Carder : MonoBehaviour
     public void RenderCard(Card cum)
     {
         title.text = cum.data["Name"];
-        description.text = cum.data["Description"];
+
+
+        string a1 = cum.data["Description"];
+
+
+        description.text = ColorText(a1);
         health.text = cum.data["Health"];
 
         bool a = false;
@@ -162,7 +169,28 @@ public class Carder : MonoBehaviour
 
     }
 
+
+    public string ColorText(string e)
+    {
+        foreach (var ef in Gamer.Instance.ValidEffects)
+        {
+            var a = e.AllIndexesOf(ef.Key).ToList();
+            for(int i = 0; i < a.Count; i++)
+            {
+                int j = (a.Count - 1) - i;
+                e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + e.Substring(a[j], ef.Key.Length) + "</color>" + e.Substring(a[j] + ef.Key.Length);
+            }
+        }
+
+
+
+
+        return e;
+    }
+
 }
+
+
 
 
 public class Card
