@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -35,6 +36,9 @@ public class Carder : MonoBehaviour
 
     public void RenderCard(Card cum)
     {
+        Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
+        Gamer.Instance.ValidMods = RandomFunctions.Instance.StringToList(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"), "\n");
+
         title.text = cum.data["Name"];
 
 
@@ -172,13 +176,16 @@ public class Carder : MonoBehaviour
 
     public string ColorText(string e)
     {
+        var el = e.ToLower();
         foreach (var ef in Gamer.Instance.ValidEffects)
         {
-            var a = e.AllIndexesOf(ef.Key).ToList();
+            var a = el.AllIndexesOf(ef.Key.ToLower()).ToList();
             for(int i = 0; i < a.Count; i++)
             {
+                string rep = ef.Key;
                 int j = (a.Count - 1) - i;
-                e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + e.Substring(a[j], ef.Key.Length) + "</color>" + e.Substring(a[j] + ef.Key.Length);
+                rep = rep + FindOtherShits(el.Substring(a[j] + rep.Length));
+                e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + rep + "</color>" + e.Substring(a[j] + rep.Length);
             }
         }
 
@@ -186,6 +193,35 @@ public class Carder : MonoBehaviour
 
 
         return e;
+    }
+    public string FindOtherShits(string e)
+    {
+        var a = e[0];
+        if (e[0] == ' ') e = e.Substring(1);
+        string outr = "";
+        foreach(var v in Gamer.Instance.ValidMods)
+        {
+            var v2 = v.Replace("\r", "").ToLower();
+            if (e.Substring(0, v2.Length) == v2)
+            {
+                var ff = $" {v.Replace("\r", "")}";
+                outr += ff;
+                e = e.Substring(ff.Length);
+            }
+        }
+        if (e[0] == ' ') e = e.Substring(1);
+        if (e.Length > 0)
+        {
+            if(e[0] == '0' || e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9' || e[0] == '-')
+                outr += " ";
+            while (e[0] == '0'|| e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9'  || e[0] == '-')
+            {
+                outr += e[0];
+                e = e.Substring(1);
+            }
+        }
+
+        return outr;
     }
 
 }

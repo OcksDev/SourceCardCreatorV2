@@ -20,6 +20,7 @@ public class Gamer : MonoBehaviour
     public GameObject ParentOfSex2;
     public GameObject SexChild2;
     public Dictionary<string, string> ValidEffects;
+    public List<string> ValidMods;
     public List<Cummer> cums = new List<Cummer>();
     public List<Color32> sexex = new List<Color32>();
 
@@ -27,10 +28,17 @@ public class Gamer : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        ValidEffects = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nCommander/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00", "\r\n", "/");
+        ValidEffects = RandomFunctions.Instance.StringToDictionary("Attack: ff0200\r\nMove: 002aff\r\nPoison: 990000\r\nArmor: 79c073\r\nHeal: 0dad00\r\nExhaustion: ffff00\r\nRitual: cfcf6a\r\nSwift: adad23\r\nCommander: c97833\r\nArc: b900ff\r\nGuide: 4d5893\r\nVault: 213598\r\nBeheading: a80402\r\nKnockback: c55958\r\nSnipe: 9a4b4b\r\nStopper: 5f0ce2\r\nAide: ff9900\r\nGrenade: e86100\r\nArena: ffaa00", "\r\n", ": ");
+
+        //
+        ValidMods = RandomFunctions.Instance.StringToList("[O]\r\n[A]\r\n[F]\r\n[R]", "\r\n");
         if (!File.Exists(FileSystem.Instance.GameDirectory + "\\EffectList.txt"))
         {
             FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\EffectList.txt", RandomFunctions.Instance.DictionaryToString(ValidEffects, "\n", ": "), true);
+        }
+        if (!File.Exists(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"))
+        {
+            FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\EffectMods.txt", RandomFunctions.Instance.ListToString(ValidMods, "\n"), true);
         }
     }
     void Start()
