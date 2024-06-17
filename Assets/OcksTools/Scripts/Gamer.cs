@@ -32,6 +32,10 @@ public class Gamer : MonoBehaviour
     public TMP_Dropdown drp2;
     public TMP_InputField drp3;
     public bool DoColorsOnText = true;
+    public GameObject Action1L;
+    public GameObject Action2L;
+    public GameObject Action3L;
+    public GameObject ActionEffect;
 
     public static Gamer Instance;
     private void Awake()
@@ -93,6 +97,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["ImportMenu"].SetActive(checks[3]);
         Tags.refs["SourceParseMenu"].SetActive(checks[4]);
         Tags.refs["AddEffect"].SetActive(checks[5]);
+        Tags.refs["SettingsMenu"].SetActive(checks[6]);
     }
 
     public void ToggleMenu(int i)
@@ -150,6 +155,7 @@ public class Gamer : MonoBehaviour
         checks[0] = false;
         checks[1] = false;
         checks[2] = false;
+        checks[6] = false;
         checks[i] = true;
 
         switch (i)
@@ -171,10 +177,54 @@ public class Gamer : MonoBehaviour
                 }
                 break;
             case 1:
+                UpdateActionLists();
                 break;
         }
 
         UpdateMenus();
+    }
+
+    public void UpdateActionLists()
+    {
+        foreach (var a in Action1L.GetComponentsInChildren<SegsWanker>())
+        {
+            Destroy(a.gameObject);
+        }
+        foreach (var a in Action2L.GetComponentsInChildren<SegsWanker>())
+        {
+            Destroy(a.gameObject);
+        }
+        foreach (var a in Action3L.GetComponentsInChildren<SegsWanker>())
+        {
+            Destroy(a.gameObject);
+        }
+        var card = Carder.Instance.CurrentCard;
+        var l = RandomFunctions.Instance.StringToList(card.data["Action1"]);
+        if (l.Count > 0 && l[0] == "") l.RemoveAt(0);
+        for (int i = 0; i < l.Count; i++)
+        {
+            var e = Instantiate(ActionEffect, transform.position, transform.rotation, Action1L.transform).GetComponent<SegsWanker>();
+            e.texty.text = l[i];
+            e.index = i;
+            e.Action = "Action1";
+        }
+        l = RandomFunctions.Instance.StringToList(card.data["Action2"]);
+        if (l.Count > 0 && l[0] == "") l.RemoveAt(0);
+        for (int i = 0; i < l.Count; i++)
+        {
+            var e = Instantiate(ActionEffect, transform.position, transform.rotation, Action2L.transform).GetComponent<SegsWanker>();
+            e.texty.text = l[i];
+            e.index = i;
+            e.Action = "Action2";
+        }l = RandomFunctions.Instance.StringToList(card.data["Action3"]);
+        if (l.Count > 0 && l[0] == "") l.RemoveAt(0);
+        for(int i = 0; i < l.Count; i++)
+        {
+            var e = Instantiate(ActionEffect, transform.position, transform.rotation, Action3L.transform).GetComponent<SegsWanker>();
+            e.texty.text = l[i];
+            e.index = i;
+            e.Action = "Action3";
+        }
     }
 
     public void AddCardEffect()
@@ -192,6 +242,7 @@ public class Gamer : MonoBehaviour
         cd.data[$"Action{applu + 1}"] = RandomFunctions.Instance.ListToString(x);
         Carder.Instance.RenderCard(cd);
         checks[5] = false;
+        UpdateActionLists();
         UpdateMenus();
     }
 

@@ -216,6 +216,7 @@ public class Carder : MonoBehaviour
     }
     public string FindOtherShits(string e)
     {
+        if (e.Length == 0) return e;
         var a = e[0];
         if (e[0] == ' ') e = e.Substring(1);
         string outr = "";

@@ -169,6 +169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   texty: {fileID: 8852554852794373977}
+  index: 0
+  Action: 
 --- !u!1 &3831472969570574356
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,8 +239,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Heal 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24a989edf0a51cb448c1fed4d061217e, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 24a989edf0a51cb448c1fed4d061217e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -268,7 +270,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 10
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -502,10 +504,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Internactct, Assembly-CSharp
-        m_MethodName: CleargridOnCard
-        m_Mode: 3
+      - m_Target: {fileID: 6583738825817253889}
+        m_TargetAssemblyTypeName: SegsWanker, Assembly-CSharp
+        m_MethodName: DeleteMe
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
