@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -23,6 +26,10 @@ public class Gamer : MonoBehaviour
     public List<string> ValidMods;
     public List<Cummer> cums = new List<Cummer>();
     public List<Color32> sexex = new List<Color32>();
+    public TMP_InputField evilfucker;
+    public TMP_Dropdown drp1;
+    public TMP_Dropdown drp2;
+    public TMP_InputField drp3;
 
     public static Gamer Instance;
     private void Awake()
@@ -52,6 +59,28 @@ public class Gamer : MonoBehaviour
     {
         ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
     }
+    public int applu = 0;
+    public void GoToAdder(int i)
+    {
+        applu = i;
+        checks[5] = true;
+        drp1.options = new List<TMP_Dropdown.OptionData>();
+        foreach (var a in ValidEffects)
+        {
+            var e = new TMP_Dropdown.OptionData(a.Key);
+            drp1.options.Add(e);
+        }
+        drp2.options = new List<TMP_Dropdown.OptionData>();
+        drp2.options.Add(new TMP_Dropdown.OptionData(""));
+        foreach (var a in ValidMods)
+        {
+            var e = new TMP_Dropdown.OptionData(a);
+            drp2.options.Add(e);
+        }
+        drp1.value = -1;
+        drp2.value = -1;
+        UpdateMenus();
+    }
 
 
     public void UpdateMenus()
@@ -60,11 +89,14 @@ public class Gamer : MonoBehaviour
         Tags.refs["ActionMenu"].SetActive(checks[1]);
         Tags.refs["GridMenu"].SetActive(checks[2]);
         Tags.refs["ImportMenu"].SetActive(checks[3]);
+        Tags.refs["SourceParseMenu"].SetActive(checks[4]);
+        Tags.refs["AddEffect"].SetActive(checks[5]);
     }
 
     public void ToggleMenu(int i)
     {
         checks[i] = !checks[i];
+        checks[5] = false;
         if (checks[i])
         {
             switch (i)
@@ -95,11 +127,24 @@ public class Gamer : MonoBehaviour
                 checks[3] = false;
                 UpdateMenus();
             }
+            else
+            if (checks[5])
+            {
+                checks[5] = false;
+                UpdateMenus();
+            }
+            else
+            if (checks[4])
+            {
+                checks[4] = false;
+                UpdateMenus();
+            }
         }
     }
 
     public void GoToExclusive(int i)
     {
+        checks[5] = false;
         checks[0] = false;
         checks[1] = false;
         checks[2] = false;
@@ -144,6 +189,52 @@ public class Gamer : MonoBehaviour
         var e = File.ReadAllText(path);
         LoadCardFromText(e);
     }
+
+    public void PraiseSourcesBaldCards()
+    {
+        var card = new Card("");
+        var e = evilfucker.text;
+        if (e.Substring(0,5) == "SONST")
+        {
+            var e2 = RandomFunctions.Instance.StringToList(evilfucker.text, "\n{|}");
+            e2.RemoveAt(0);
+            e2.RemoveAt(0);
+            var a = RandomFunctions.Instance.StringToList(e2[0].Substring(e2[0].IndexOf(": ") + 2), "^%^");
+            card.data["Name"] = a[0];
+            card.data["ImagePath"] = a[1];
+            card.data["Health"] = a[2];
+            card.data["Description"] = a[3];
+
+            var w = RandomFunctions.Instance.StringToList(e2[3].Substring(e2[3].IndexOf(": ") + 2), "^%^");
+            for (int i = 0; i < w.Count; i++)
+            {
+                if (w[i] == "3") w[i] = "1";
+            }
+            w[40] = "3";
+            card.data["Grid1"] = RandomFunctions.Instance.ListToString(w);
+            w = RandomFunctions.Instance.StringToList(e2[6].Substring(e2[6].IndexOf(": ") + 2), "^%^");
+            for (int i = 0; i < w.Count; i++)
+            {
+                if (w[i] == "3") w[i] = "1";
+            }
+            w[40] = "3";
+            card.data["Grid2"] = RandomFunctions.Instance.ListToString(w);
+            w = RandomFunctions.Instance.StringToList(e2[9].Substring(e2[9].IndexOf(": ") + 2), "^%^");
+            for (int i = 0; i < w.Count; i++)
+            {
+                if (w[i] == "3") w[i] = "1";
+            }
+            w[40] = "3";
+            card.data["Grid3"] = RandomFunctions.Instance.ListToString(w);
+
+            LoadCardFromText(card.Encode());
+        }
+        else if (e.Substring(0, 5) == "OXCRD")
+        {
+            LoadCardFromText(e);
+        }
+    }
+
 
     public void LoadCardFromText(string e)
     {

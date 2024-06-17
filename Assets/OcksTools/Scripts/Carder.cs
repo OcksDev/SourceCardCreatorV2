@@ -38,7 +38,7 @@ public class Carder : MonoBehaviour
     {
         Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
         Gamer.Instance.ValidMods = RandomFunctions.Instance.StringToList(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"), "\n");
-
+        
         title.text = cum.data["Name"];
 
 
@@ -278,6 +278,6 @@ public class Card
     }
     public string Encode()
     {
-        return RandomFunctions.Instance.DictionaryToString(data, "\n<> ", ": ");
+        return "OXCRD\n<> " + RandomFunctions.Instance.DictionaryToString(data, "\n<> ", ": ");
     }
 }

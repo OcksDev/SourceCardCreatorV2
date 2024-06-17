@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 5148849035234310028}
   - component: {fileID: 2009202739582746113}
   - component: {fileID: 5881164642583767881}
+  - component: {fileID: 6583738825817253889}
   m_Layer: 5
   m_Name: ActionEfectc
   m_TagString: Untagged
@@ -155,6 +156,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6583738825817253889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3598166803552620216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e03d9b2fc479d04b83bd444f95b1cd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texty: {fileID: 8852554852794373977}
 --- !u!1 &3831472969570574356
 GameObject:
   m_ObjectHideFlags: 0

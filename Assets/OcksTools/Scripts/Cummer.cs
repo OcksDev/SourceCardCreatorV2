@@ -19,7 +19,7 @@ public class Cummer : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && !fukedass)
+        if ((Input.GetMouseButtonDown(0) && !fukedass) || Input.GetMouseButtonDown(1))
         {
             NextState();
         }
