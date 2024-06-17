@@ -11,10 +11,11 @@ public class Selelele : MonoBehaviour
     public void Start()
     {
         int i = FilePath.LastIndexOf("/");
-        if(i == -1) i = FilePath.LastIndexOf("\\");
+        if(i < FilePath.LastIndexOf("\\")) i = FilePath.LastIndexOf("\\");
 
-        var e = FilePath.Substring(i+1+"Saves\\".Length);
+        var e = FilePath.Substring(i+1);
         i = e.LastIndexOf(".");
+        Debug.Log(e);
         e = e.Substring(0,i);
         text.text = e;
     }

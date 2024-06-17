@@ -40,6 +40,12 @@ public class Gamer : MonoBehaviour
     public Dictionary<string, string> settings;
     public TMP_InputField shungite;
     public TMP_InputField shungite2;
+    public GameObject pt1;
+    public GameObject pt2;
+    public GameObject notif;
+    float t = 0f;
+    float t2 = 0f;
+    bool shex = false;
 
     public static Gamer Instance;
     private void Awake()
@@ -69,11 +75,55 @@ public class Gamer : MonoBehaviour
         }
 
     }
+
+    private void FixedUpdate()
+    {
+        if (shex)
+        {
+            notif.transform.position = Vector3.Lerp(pt1.transform.position, pt2.transform.position, Mathf.Sin(t * Mathf.PI));
+            if (t < 0.5f)
+            {
+                t = Mathf.Clamp(t + Time.deltaTime, 0, 0.5f);
+            }
+            else
+            {
+                if (t2 < 2f)
+                {
+                    t2 = Mathf.Clamp(t2 + Time.deltaTime, 0, 2f);
+                }
+                else
+                {
+                    if (t < 1f)
+                    {
+                        t = Mathf.Clamp(t + Time.deltaTime, 0, 1f);
+                    }
+                    else
+                    {
+                        shex = false;
+                        t = 0;
+                        t2= 0;
+                    }
+                }
+            }
+        }
+    }
+
+
     void Start()
     {
         checks[0] = true;
         UpdateMenus();
     }
+
+    public void SendNotif(string e)
+    {
+        notif.GetComponentInChildren<TextMeshProUGUI>().text = e;
+        notif.transform.position = pt1.transform.position;
+        shex = true;
+        t = 0;
+        t2 = 0;
+    }
+
 
     public void Toggle(string type)
     {
@@ -294,6 +344,7 @@ public class Gamer : MonoBehaviour
         var x = RandomFunctions.Instance.StringToList( cd.data[$"Action{applu+1}"]);
         x.Add(e);
         cd.data[$"Action{applu + 1}"] = RandomFunctions.Instance.ListToString(x);
+        drp3.text = "";
         Carder.Instance.RenderCard(cd);
         checks[5] = false;
         UpdateActionLists();
@@ -316,6 +367,7 @@ public class Gamer : MonoBehaviour
     public void LoadCardFromPath(string path)
     {
         var e = File.ReadAllText(path);
+        SendNotif($"Loaded card from file\n\"{path}\"");
         LoadCardFromText(e);
     }
 
@@ -340,6 +392,8 @@ public class Gamer : MonoBehaviour
                 if (w[i] == "3") w[i] = "1";
             }
             w[40] = "3";
+            w.Reverse();
+            w.RemoveAt(0);
             card.data["Grid1"] = RandomFunctions.Instance.ListToString(w);
             w = RandomFunctions.Instance.StringToList(e2[6].Substring(e2[6].IndexOf(": ") + 2), "^%^");
             for (int i = 0; i < w.Count; i++)
@@ -347,6 +401,8 @@ public class Gamer : MonoBehaviour
                 if (w[i] == "3") w[i] = "1";
             }
             w[40] = "3";
+            w.Reverse();
+            w.RemoveAt(0);
             card.data["Grid2"] = RandomFunctions.Instance.ListToString(w);
             w = RandomFunctions.Instance.StringToList(e2[9].Substring(e2[9].IndexOf(": ") + 2), "^%^");
             for (int i = 0; i < w.Count; i++)
@@ -354,6 +410,8 @@ public class Gamer : MonoBehaviour
                 if (w[i] == "3") w[i] = "1";
             }
             w[40] = "3";
+            w.Reverse();
+            w.RemoveAt(0);
             card.data["Grid3"] = RandomFunctions.Instance.ListToString(w);
 
             var wi = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nLimit/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00\r\n", "\r\n", "/");
@@ -400,11 +458,12 @@ public class Gamer : MonoBehaviour
 
 
 
-
+            SendNotif("Loaded card from format SONST");
             LoadCardFromText(card.Encode());
         }
         else if (e.Substring(0, 5) == "OXCRD")
         {
+            SendNotif("Loaded card from format OXCRD");
             LoadCardFromText(e);
         }
     }
