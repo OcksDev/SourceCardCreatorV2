@@ -37,6 +37,7 @@ public class Carder : MonoBehaviour
     public void RenderCard(Card cum)
     {
         Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
+        Gamer.Instance.settings = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\Settings.txt"), "\n", ": ");
         Gamer.Instance.ValidMods = RandomFunctions.Instance.StringToList(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"), "\n");
         
         title.text = cum.data["Name"];
@@ -194,7 +195,7 @@ public class Carder : MonoBehaviour
 
     public string ColorText(string e)
     {
-        if(!Gamer.Instance.DoColorsOnText) return e;
+        if (!(Gamer.Instance.settings["ColorText"]=="True")) return e;
         var el = e.ToLower();
         foreach (var ef in Gamer.Instance.ValidEffects)
         {

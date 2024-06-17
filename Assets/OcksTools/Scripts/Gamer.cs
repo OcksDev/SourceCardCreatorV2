@@ -36,6 +36,10 @@ public class Gamer : MonoBehaviour
     public GameObject Action2L;
     public GameObject Action3L;
     public GameObject ActionEffect;
+    public Toggle segsmyass;
+    public Dictionary<string, string> settings;
+    public TMP_InputField shungite;
+    public TMP_InputField shungite2;
 
     public static Gamer Instance;
     private void Awake()
@@ -53,6 +57,17 @@ public class Gamer : MonoBehaviour
         {
             FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\EffectMods.txt", RandomFunctions.Instance.ListToString(ValidMods, "\n"), true);
         }
+        settings = new Dictionary<string, string>()
+        {
+            {"ColorText", "True" },
+            {"ImageExportPath", FileSystem.Instance.GameDirectory + "\\Images" },
+            {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
+        };
+        if (!File.Exists(FileSystem.Instance.GameDirectory + "\\Settings.txt"))
+        {
+            FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\Settings.txt", RandomFunctions.Instance.DictionaryToString(settings, "\n", ": "), true);
+        }
+
     }
     void Start()
     {
@@ -60,11 +75,44 @@ public class Gamer : MonoBehaviour
         UpdateMenus();
     }
 
+    public void Toggle(string type)
+    {
+        switch (type)
+        {
+            case "Color":
+                settings["ColorText"] = segsmyass.isOn ?"True":"False";
+                SetSettings();
+                Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
+                break;
+        }
+    }
+
+    public void SetExportPath()
+    {
+        settings["ImageExportPath"] = shungite.text;
+        SetSettings();
+    }
+    
+    public void SetSavePath()
+    {
+        settings["SaveFilePath"] = shungite2.text;
+        SetSettings();
+    }
 
     public void ReadValidEffects()
     {
         ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
     }
+    public void ReadSettings()
+    {
+        settings = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\Settings.txt"), "\n", ": ");
+    }
+
+    public void SetSettings()
+    {
+        FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\Settings.txt", RandomFunctions.Instance.DictionaryToString(settings, "\n", ": "), true);
+    }
+
     public int applu = 0;
     public void GoToAdder(int i)
     {
@@ -109,7 +157,7 @@ public class Gamer : MonoBehaviour
             switch (i)
             {
                 case 3:
-                    string[] filePaths = Directory.GetFiles(FileSystem.Instance.GameDirectory + "/Saves", "*.txt", SearchOption.AllDirectories);
+                    string[] filePaths = Directory.GetFiles(settings["SaveFilePath"], "*.txt", SearchOption.AllDirectories);
                     foreach(var e in ParentOfSex.GetComponentsInChildren<Selelele>())
                     {
                         Destroy(e.gameObject);
@@ -178,6 +226,12 @@ public class Gamer : MonoBehaviour
                 break;
             case 1:
                 UpdateActionLists();
+                break;
+            case 6:
+                ReadSettings();
+                segsmyass.isOn = settings["ColorText"]=="True";
+                shungite.text = settings["ImageExportPath"];
+                shungite2.text = settings["SaveFilePath"];
                 break;
         }
 

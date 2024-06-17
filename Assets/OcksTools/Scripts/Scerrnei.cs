@@ -23,7 +23,7 @@ public class Scerrnei : MonoBehaviour
         RenderTexture.active = null; // JC: added to avoid errors
         Destroy(rt);
         byte[] bytes = screenShot.EncodeToPNG();
-        System.IO.File.WriteAllBytes("D:\\UGameBuilds\\Sex2\\"+"a2.png", bytes);
+        System.IO.File.WriteAllBytes(Gamer.Instance.settings["ImageExportPath"] + $"/{Carder.Instance.CurrentCard.data["Name"]}.png", bytes);
         if (e != null) camera.targetTexture = e;
         maincamera.Render();
 

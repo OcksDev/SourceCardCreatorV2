@@ -66,7 +66,7 @@ public class Internactct : MonoBehaviour
     public void SaveCardToFile()
     {
         var e = Carder.Instance.CurrentCard.Encode();
-        FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "/Saves/" + Carder.Instance.CurrentCard.data["Name"] + ".txt", e, true);
+        FileSystem.Instance.WriteFile($"{Gamer.Instance.settings["SaveFilePath"]}/" + Carder.Instance.CurrentCard.data["Name"] + ".txt", e, true);
 
     }
 

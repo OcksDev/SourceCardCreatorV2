@@ -43,6 +43,7 @@ public class FileSystem : MonoBehaviour
         CreateFolder(OcksDirectry);
         CreateFolder(GameDirectory);
         CreateFolder(GameDirectory+"/Saves");
+        CreateFolder(GameDirectory+"/Images");
 
         WriteFile(FileLocations[0], "", false);
         GameName = $"CardCreatorV2 {GameVer}";
@@ -58,7 +59,7 @@ public class FileSystem : MonoBehaviour
         //ConsoleLol.instance.ConsoleLog("Current File Location: " + DirectoryLol);
         //ConsoleLol.instance.ConsoleLog("Game Data Location: " + GameDirectory);
 
-        WriteFile($"{GameDirectory}\\Test.txt", "Test Data Lol", false);
+        //WriteFile($"{GameDirectory}\\Test.txt", "Test Data Lol", false);
 
 
     }
