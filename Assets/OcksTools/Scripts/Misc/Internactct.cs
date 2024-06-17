@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 
@@ -66,9 +67,12 @@ public class Internactct : MonoBehaviour
     public void SaveCardToFile()
     {
         var e = Carder.Instance.CurrentCard.Encode();
+        if(Gamer.Instance.sis != "") File.Delete(Gamer.Instance.sis);
         var ww = $"{Gamer.Instance.settings["SaveFilePath"]}/" + Carder.Instance.CurrentCard.data["Name"] + ".txt";
         FileSystem.Instance.WriteFile(ww, e, true);
+        Gamer.Instance.sis = ww;
         Gamer.Instance.SendNotif($"Saved Card to \n\"{ww}\"");
+        Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
 
     }
 

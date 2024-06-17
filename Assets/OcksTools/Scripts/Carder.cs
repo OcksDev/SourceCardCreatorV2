@@ -42,6 +42,7 @@ public class Carder : MonoBehaviour
         
         title.text = cum.data["Name"];
 
+        Gamer.Instance.sss.text = Gamer.Instance.sis != "" ? $"Current Open File: {Gamer.Instance.sis}" : "";
 
         string a1 = cum.data["Description"];
         string a2 = "";
@@ -228,7 +229,7 @@ public class Carder : MonoBehaviour
             {
                 var ff = $" {v.Replace("\r", "")}";
                 outr += ff;
-                e = e.Substring(ff.Length);
+                e = e.Substring(Mathf.Clamp(ff.Length, 0, e.Length));
             }
         }
         if (e.Length > 0 && e[0] == ' ') e = e.Substring(1);

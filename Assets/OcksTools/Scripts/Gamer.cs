@@ -43,6 +43,9 @@ public class Gamer : MonoBehaviour
     public GameObject pt1;
     public GameObject pt2;
     public GameObject notif;
+    public TextMeshProUGUI sss;
+    public Toggle segsmyassdos;
+    public string sis;
     float t = 0f;
     float t2 = 0f;
     bool shex = false;
@@ -68,6 +71,7 @@ public class Gamer : MonoBehaviour
             {"ColorText", "True" },
             {"ImageExportPath", FileSystem.Instance.GameDirectory + "\\Images" },
             {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
+            {"Notifications", "True" },
         };
         if (!File.Exists(FileSystem.Instance.GameDirectory + "\\Settings.txt"))
         {
@@ -117,6 +121,7 @@ public class Gamer : MonoBehaviour
 
     public void SendNotif(string e)
     {
+        if (settings["Notifications"] != "True") return;
         notif.GetComponentInChildren<TextMeshProUGUI>().text = e;
         notif.transform.position = pt1.transform.position;
         shex = true;
@@ -124,15 +129,23 @@ public class Gamer : MonoBehaviour
         t2 = 0;
     }
 
-
+    public void NewCard()
+    {
+        sis = "";
+        LoadCardFromText("");
+    }
     public void Toggle(string type)
     {
         switch (type)
         {
             case "Color":
-                settings["ColorText"] = segsmyass.isOn ?"True":"False";
+                settings["ColorText"] = segsmyass.isOn ? "True" : "False";
                 SetSettings();
                 Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
+                break;
+            case "Notif":
+                settings["Notifications"] = segsmyassdos.isOn ? "True" : "False";
+                SetSettings();
                 break;
         }
     }
@@ -207,22 +220,25 @@ public class Gamer : MonoBehaviour
             switch (i)
             {
                 case 3:
-                    string[] filePaths = Directory.GetFiles(settings["SaveFilePath"], "*.txt", SearchOption.AllDirectories);
-                    foreach(var e in ParentOfSex.GetComponentsInChildren<Selelele>())
-                    {
-                        Destroy(e.gameObject);
-                    }
-                    foreach(var s in filePaths)
-                    {
-                        var e = Instantiate(SexChild, transform.position, transform.rotation, ParentOfSex.transform);
-                        e.GetComponent<Selelele>().FilePath = s;
-                    }
+                    ReloadSaveFiles();
                     break;
             }
         }
         UpdateMenus();
     }
-
+    public void ReloadSaveFiles()
+    {
+        string[] filePaths = Directory.GetFiles(settings["SaveFilePath"], "*.txt", SearchOption.AllDirectories);
+        foreach (var e in ParentOfSex.GetComponentsInChildren<Selelele>())
+        {
+            Destroy(e.gameObject);
+        }
+        foreach (var s in filePaths)
+        {
+            var e = Instantiate(SexChild, transform.position, transform.rotation, ParentOfSex.transform);
+            e.GetComponent<Selelele>().FilePath = s;
+        }
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -282,6 +298,7 @@ public class Gamer : MonoBehaviour
                 segsmyass.isOn = settings["ColorText"]=="True";
                 shungite.text = settings["ImageExportPath"];
                 shungite2.text = settings["SaveFilePath"];
+                segsmyassdos.isOn = settings["Notifications"] == "True";
                 break;
         }
 
@@ -367,8 +384,14 @@ public class Gamer : MonoBehaviour
     public void LoadCardFromPath(string path)
     {
         var e = File.ReadAllText(path);
+        sis = path;
         SendNotif($"Loaded card from file\n\"{path}\"");
         LoadCardFromText(e);
+    }
+    public void RemoveLink()
+    {
+        sis = "";
+        Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
     }
 
     public void PraiseSourcesBaldCards()
@@ -457,13 +480,14 @@ public class Gamer : MonoBehaviour
             card.data["Action3"] = RandomFunctions.Instance.ListToString(shi);
 
 
-
             SendNotif("Loaded card from format SONST");
+            sis = "";
             LoadCardFromText(card.Encode());
         }
         else if (e.Substring(0, 5) == "OXCRD")
         {
             SendNotif("Loaded card from format OXCRD");
+            sis = "";
             LoadCardFromText(e);
         }
     }
