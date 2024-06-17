@@ -43,9 +43,27 @@ public class Carder : MonoBehaviour
 
 
         string a1 = cum.data["Description"];
+        string a2 = "";
+        var b1 = RandomFunctions.Instance.StringToList(cum.data["Action1"]);
+        if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
+        if (b1.Count > 0 && b1[0] != "")
+        {
+            a2 += "Action 1: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+        }
+        b1 = RandomFunctions.Instance.StringToList(cum.data["Action2"]);
+        if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
+        if (b1.Count > 0 && b1[0] != "")
+        {
+            a2 += "Action 2: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+        }
+        b1 = RandomFunctions.Instance.StringToList(cum.data["Action3"]);
+        if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
+        if (b1.Count > 0 && b1[0] != "")
+        {
+            a2 += "Action 3: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+        }
 
-
-        description.text = ColorText(a1);
+        description.text = ColorText(a2 + a1);
         health.text = cum.data["Health"];
 
         bool a = false;
@@ -176,6 +194,7 @@ public class Carder : MonoBehaviour
 
     public string ColorText(string e)
     {
+        if(!Gamer.Instance.DoColorsOnText) return e;
         var el = e.ToLower();
         foreach (var ef in Gamer.Instance.ValidEffects)
         {
@@ -186,6 +205,7 @@ public class Carder : MonoBehaviour
                 int j = (a.Count - 1) - i;
                 rep = rep + FindOtherShits(el.Substring(a[j] + rep.Length));
                 e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + rep + "</color>" + e.Substring(a[j] + rep.Length);
+                el = e.ToLower();
             }
         }
 
@@ -202,19 +222,19 @@ public class Carder : MonoBehaviour
         foreach(var v in Gamer.Instance.ValidMods)
         {
             var v2 = v.Replace("\r", "").ToLower();
-            if (e.Substring(0, v2.Length) == v2)
+            if (v2.Length <= e.Length && e.Substring(0, v2.Length) == v2)
             {
                 var ff = $" {v.Replace("\r", "")}";
                 outr += ff;
                 e = e.Substring(ff.Length);
             }
         }
-        if (e[0] == ' ') e = e.Substring(1);
+        if (e.Length > 0 && e[0] == ' ') e = e.Substring(1);
         if (e.Length > 0)
         {
-            if(e[0] == '0' || e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9' || e[0] == '-')
+            if(e.Length > 0 && (e[0] == '0' || e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9' || e[0] == '-'))
                 outr += " ";
-            while (e[0] == '0'|| e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9'  || e[0] == '-')
+            while (e.Length > 0 &&( e[0] == '0'|| e[0] == '1' || e[0] == '2' || e[0] == '3' || e[0] == '4' || e[0] == '5' || e[0] == '6' || e[0] == '7' || e[0] == '8' || e[0] == '9'  || e[0] == '-'))
             {
                 outr += e[0];
                 e = e.Substring(1);
@@ -244,9 +264,11 @@ public class Card
         {
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
-            {"Actions" , ""},
             {"Health" , "0"},
             {"ImagePath" , ""},
+            {"Action1" , ""},
+            {"Action2" , ""},
+            {"Action3" , ""},
             {"Grid1" , em},
             {"Grid2" , em},
             {"Grid3" , em},

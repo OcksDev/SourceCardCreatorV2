@@ -2636,7 +2636,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 185.9, y: 77.6}
+  m_AnchoredPosition: {x: 138, y: 77.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &171560307
@@ -8855,7 +8855,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 536654581}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 855370754}
+        m_TargetAssemblyTypeName: Gamer, Assembly-CSharp
+        m_MethodName: AddCardEffect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &536654581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13178,6 +13190,7 @@ MonoBehaviour:
   drp1: {fileID: 1310129930}
   drp2: {fileID: 1198462769}
   drp3: {fileID: 1817421110}
+  DoColorsOnText: 1
   applu: 0
 --- !u!114 &855370755
 MonoBehaviour:
@@ -25072,8 +25085,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 191, y: -59.1}
-  m_SizeDelta: {x: 581.4, y: 175.96}
+  m_AnchoredPosition: {x: 143.09999, y: -59.1}
+  m_SizeDelta: {x: 702.9, y: 175.96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537716430
 MonoBehaviour:

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
@@ -30,12 +31,13 @@ public class Gamer : MonoBehaviour
     public TMP_Dropdown drp1;
     public TMP_Dropdown drp2;
     public TMP_InputField drp3;
+    public bool DoColorsOnText = true;
 
     public static Gamer Instance;
     private void Awake()
     {
         Instance = this;
-        ValidEffects = RandomFunctions.Instance.StringToDictionary("Attack: ff0200\r\nMove: 002aff\r\nPoison: 990000\r\nArmor: 79c073\r\nHeal: 0dad00\r\nExhaustion: ffff00\r\nRitual: cfcf6a\r\nSwift: adad23\r\nCommander: c97833\r\nArc: b900ff\r\nGuide: 4d5893\r\nVault: 213598\r\nBeheading: a80402\r\nKnockback: c55958\r\nSnipe: 9a4b4b\r\nStopper: 5f0ce2\r\nAide: ff9900\r\nGrenade: e86100\r\nArena: ffaa00", "\r\n", ": ");
+        ValidEffects = RandomFunctions.Instance.StringToDictionary("Attack: ff0200\r\nMove: 002aff\r\nPoison: 990000\r\nArmor: 79c073\r\nHeal: 0dad00\r\nExhaustion: ffff00\r\nRitual: cfcf6a\r\nSwift: adad23\r\nLimit: c97833\r\nArc: b900ff\r\nGuide: 4d5893\r\nVault: 213598\r\nBeheading: a80402\r\nKnockback: c55958\r\nSnipe: 9a4b4b\r\nStopper: 5f0ce2\r\nAide: ff9900\r\nGrenade: e86100\r\nArena: ffaa00", "\r\n", ": ");
 
         //
         ValidMods = RandomFunctions.Instance.StringToList("[O]\r\n[A]\r\n[F]\r\n[R]", "\r\n");
@@ -168,10 +170,32 @@ public class Gamer : MonoBehaviour
                     e.UpdateColor();
                 }
                 break;
+            case 1:
+                break;
         }
 
         UpdateMenus();
     }
+
+    public void AddCardEffect()
+    {
+        var e = ValidEffects.ElementAt(drp1.value).Key;
+        e = e + (drp2.value > 0 ? ($" {ValidMods[drp2.value-1]}") : "");
+        var e2 = drp3.text;
+        if(e2 != "" && e2 != "0")
+        {
+            e += " " + e2;
+        }
+        var cd = Carder.Instance.CurrentCard;
+        var x = RandomFunctions.Instance.StringToList( cd.data[$"Action{applu+1}"]);
+        x.Add(e);
+        cd.data[$"Action{applu + 1}"] = RandomFunctions.Instance.ListToString(x);
+        Carder.Instance.RenderCard(cd);
+        checks[5] = false;
+        UpdateMenus();
+    }
+
+
     public void PickFile(int i)
     {
         StartCoroutine(OpenFileEELol(i));
@@ -227,6 +251,51 @@ public class Gamer : MonoBehaviour
             w[40] = "3";
             card.data["Grid3"] = RandomFunctions.Instance.ListToString(w);
 
+            var wi = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nLimit/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00\r\n", "\r\n", "/");
+
+            var w1 = RandomFunctions.Instance.StringToList(e2[1].Substring(e2[1].IndexOf(": ") + 2), "^%^");
+            var w2 = RandomFunctions.Instance.StringToList(e2[2].Substring(e2[2].IndexOf(": ") + 2), "^%^");
+            List<string> shi = new List<string>();
+            for (int i = 0; i < w1.Count; i++)
+            {
+                if (w1[i] == "True")
+                {
+                    string comp = wi.ElementAt(i).Key;
+                    if (w2[i] != "") comp += " " + w2[i];
+                    shi.Add(comp);
+                }
+            }
+            card.data["Action1"] = RandomFunctions.Instance.ListToString(shi);
+            w1 = RandomFunctions.Instance.StringToList(e2[4].Substring(e2[4].IndexOf(": ") + 2), "^%^");
+            w2 = RandomFunctions.Instance.StringToList(e2[5].Substring(e2[5].IndexOf(": ") + 2), "^%^");
+            shi = new List<string>();
+            for (int i = 0; i < w1.Count; i++)
+            {
+                if (w1[i] == "True")
+                {
+                    string comp = wi.ElementAt(i).Key;
+                    if (w2[i] != "") comp += " " + w2[i];
+                    shi.Add(comp);
+                }
+            }
+            card.data["Action2"] = RandomFunctions.Instance.ListToString(shi);
+            w1 = RandomFunctions.Instance.StringToList(e2[7].Substring(e2[7].IndexOf(": ") + 2), "^%^");
+            w2 = RandomFunctions.Instance.StringToList(e2[8].Substring(e2[8].IndexOf(": ") + 2), "^%^");
+            shi = new List<string>();
+            for (int i = 0; i < w1.Count; i++)
+            {
+                if (w1[i] == "True")
+                {
+                    string comp = wi.ElementAt(i).Key;
+                    if (w2[i] != "") comp += " " + w2[i];
+                    shi.Add(comp);
+                }
+            }
+            card.data["Action3"] = RandomFunctions.Instance.ListToString(shi);
+
+
+
+
             LoadCardFromText(card.Encode());
         }
         else if (e.Substring(0, 5) == "OXCRD")
@@ -238,7 +307,9 @@ public class Gamer : MonoBehaviour
 
     public void LoadCardFromText(string e)
     {
-        Gamer.Instance.checks[3] = false;
+        checks[3] = false;
+        checks[4] = false;
+        checks[5] = false;
         var card = new Card(e);
         namefuiield.text = card.data["Name"];
         imagefuiield.text = card.data["ImagePath"];

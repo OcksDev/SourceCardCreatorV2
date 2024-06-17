@@ -28,12 +28,4 @@ public class Scerrnei : MonoBehaviour
         maincamera.Render();
 
     }
-
-    void LateUpdate()
-    {
-        if (Input.GetKeyDown("k"))
-        {
-            TakeHiResShot();
-        }
-    }
 }
