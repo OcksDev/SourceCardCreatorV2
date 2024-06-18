@@ -279,25 +279,118 @@ public class Card
     }
     public void Decode(string e)
     {
-        var d = RandomFunctions.Instance.StringToList(e, "\n<> ");
-        Dictionary<string, string> syus = new Dictionary<string, string>();
-        foreach (string s in d)
+        bool cum = true;
+        if(e.Length >= 5)
         {
-            if (s.Contains(": "))
+            switch (e.Substring(0, 5))
             {
-                syus.Add(s.Substring(0, s.IndexOf(": ")), s.Substring(s.IndexOf(": ") + 2));
+                case "SONST":
+                    cum = false;
+                    data = DefaultValueSet();
+                    var e2 = RandomFunctions.Instance.StringToList(e, "\n{|}");
+                    e2.RemoveAt(0);
+                    e2.RemoveAt(0);
+                    var a = RandomFunctions.Instance.StringToList(e2[0].Substring(e2[0].IndexOf(": ") + 2), "^%^");
+                    data["Name"] = a[0];
+                    data["ImagePath"] = a[1];
+                    data["Health"] = a[2];
+                    data["Description"] = a[3];
+
+                    var w = RandomFunctions.Instance.StringToList(e2[3].Substring(e2[3].IndexOf(": ") + 2), "^%^");
+                    for (int i = 0; i < w.Count; i++)
+                    {
+                        if (w[i] == "3") w[i] = "1";
+                    }
+                    w[40] = "3";
+                    w.Reverse();
+                    w.RemoveAt(0);
+                    data["Grid1"] = RandomFunctions.Instance.ListToString(w);
+                    w = RandomFunctions.Instance.StringToList(e2[6].Substring(e2[6].IndexOf(": ") + 2), "^%^");
+                    for (int i = 0; i < w.Count; i++)
+                    {
+                        if (w[i] == "3") w[i] = "1";
+                    }
+                    w[40] = "3";
+                    w.Reverse();
+                    w.RemoveAt(0);
+                    data["Grid2"] = RandomFunctions.Instance.ListToString(w);
+                    w = RandomFunctions.Instance.StringToList(e2[9].Substring(e2[9].IndexOf(": ") + 2), "^%^");
+                    for (int i = 0; i < w.Count; i++)
+                    {
+                        if (w[i] == "3") w[i] = "1";
+                    }
+                    w[40] = "3";
+                    w.Reverse();
+                    w.RemoveAt(0);
+                    data["Grid3"] = RandomFunctions.Instance.ListToString(w);
+
+                    var wi = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nLimit/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00\r\n", "\r\n", "/");
+
+                    var w1 = RandomFunctions.Instance.StringToList(e2[1].Substring(e2[1].IndexOf(": ") + 2), "^%^");
+                    var w2 = RandomFunctions.Instance.StringToList(e2[2].Substring(e2[2].IndexOf(": ") + 2), "^%^");
+                    List<string> shi = new List<string>();
+                    for (int i = 0; i < w1.Count; i++)
+                    {
+                        if (w1[i] == "True")
+                        {
+                            string comp = wi.ElementAt(i).Key;
+                            if (w2[i] != "") comp += " " + w2[i];
+                            shi.Add(comp);
+                        }
+                    }
+                    data["Action1"] = RandomFunctions.Instance.ListToString(shi);
+                    w1 = RandomFunctions.Instance.StringToList(e2[4].Substring(e2[4].IndexOf(": ") + 2), "^%^");
+                    w2 = RandomFunctions.Instance.StringToList(e2[5].Substring(e2[5].IndexOf(": ") + 2), "^%^");
+                    shi = new List<string>();
+                    for (int i = 0; i < w1.Count; i++)
+                    {
+                        if (w1[i] == "True")
+                        {
+                            string comp = wi.ElementAt(i).Key;
+                            if (w2[i] != "") comp += " " + w2[i];
+                            shi.Add(comp);
+                        }
+                    }
+                    data["Action2"] = RandomFunctions.Instance.ListToString(shi);
+                    w1 = RandomFunctions.Instance.StringToList(e2[7].Substring(e2[7].IndexOf(": ") + 2), "^%^");
+                    w2 = RandomFunctions.Instance.StringToList(e2[8].Substring(e2[8].IndexOf(": ") + 2), "^%^");
+                    shi = new List<string>();
+                    for (int i = 0; i < w1.Count; i++)
+                    {
+                        if (w1[i] == "True")
+                        {
+                            string comp = wi.ElementAt(i).Key;
+                            if (w2[i] != "") comp += " " + w2[i];
+                            shi.Add(comp);
+                        }
+                    }
+                    data["Action3"] = RandomFunctions.Instance.ListToString(shi);
+
+                    break;
             }
         }
-        data = DefaultValueSet();
-        foreach (var a in syus)
+        if (cum)
         {
-            if (data.ContainsKey(a.Key))
+            var d = RandomFunctions.Instance.StringToList(e, "\n<> ");
+            Dictionary<string, string> syus = new Dictionary<string, string>();
+            foreach (string s in d)
             {
-                data[a.Key] = a.Value;
+                if (s.Contains(": "))
+                {
+                    syus.Add(s.Substring(0, s.IndexOf(": ")), s.Substring(s.IndexOf(": ") + 2));
+                }
             }
-            else
+            data = DefaultValueSet();
+            foreach (var ass in syus)
             {
-                data.Add(a.Key, a.Value);
+                if (data.ContainsKey(ass.Key))
+                {
+                    data[ass.Key] = ass.Value;
+                }
+                else
+                {
+                    data.Add(ass.Key, ass.Value);
+                }
             }
         }
     }

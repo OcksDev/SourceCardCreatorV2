@@ -226,17 +226,28 @@ public class Gamer : MonoBehaviour
         }
         UpdateMenus();
     }
+
+    public List<Selelele> ccum = new List<Selelele>();
     public void ReloadSaveFiles()
     {
         string[] filePaths = Directory.GetFiles(settings["SaveFilePath"], "*.txt", SearchOption.AllDirectories);
-        foreach (var e in ParentOfSex.GetComponentsInChildren<Selelele>())
+        int x = filePaths.Length - ccum.Count;
+        for(int i = 0; i < x; i++)
         {
-            Destroy(e.gameObject);
+            ccum.Add(Instantiate(SexChild, transform.position, transform.rotation, ParentOfSex.transform).GetComponent<Selelele>());
         }
-        foreach (var s in filePaths)
+        for (int i = 0; i < -x; i++)
         {
-            var e = Instantiate(SexChild, transform.position, transform.rotation, ParentOfSex.transform);
-            e.GetComponent<Selelele>().FilePath = s;
+            Destroy(ccum[i].gameObject);
+            ccum.RemoveAt(i);
+        }
+        for (int i = 0; i < ccum.Count; i++)
+        {
+            if(ccum[i].FilePath != filePaths[i])
+            {
+                ccum[i].FilePath = filePaths[i];
+                ccum[i].FardStart();
+            }
         }
     }
     private void Update()
@@ -400,93 +411,19 @@ public class Gamer : MonoBehaviour
         var e = evilfucker.text;
         if (e.Substring(0,5) == "SONST")
         {
-            var e2 = RandomFunctions.Instance.StringToList(evilfucker.text, "\n{|}");
-            e2.RemoveAt(0);
-            e2.RemoveAt(0);
-            var a = RandomFunctions.Instance.StringToList(e2[0].Substring(e2[0].IndexOf(": ") + 2), "^%^");
-            card.data["Name"] = a[0];
-            card.data["ImagePath"] = a[1];
-            card.data["Health"] = a[2];
-            card.data["Description"] = a[3];
-
-            var w = RandomFunctions.Instance.StringToList(e2[3].Substring(e2[3].IndexOf(": ") + 2), "^%^");
-            for (int i = 0; i < w.Count; i++)
-            {
-                if (w[i] == "3") w[i] = "1";
-            }
-            w[40] = "3";
-            w.Reverse();
-            w.RemoveAt(0);
-            card.data["Grid1"] = RandomFunctions.Instance.ListToString(w);
-            w = RandomFunctions.Instance.StringToList(e2[6].Substring(e2[6].IndexOf(": ") + 2), "^%^");
-            for (int i = 0; i < w.Count; i++)
-            {
-                if (w[i] == "3") w[i] = "1";
-            }
-            w[40] = "3";
-            w.Reverse();
-            w.RemoveAt(0);
-            card.data["Grid2"] = RandomFunctions.Instance.ListToString(w);
-            w = RandomFunctions.Instance.StringToList(e2[9].Substring(e2[9].IndexOf(": ") + 2), "^%^");
-            for (int i = 0; i < w.Count; i++)
-            {
-                if (w[i] == "3") w[i] = "1";
-            }
-            w[40] = "3";
-            w.Reverse();
-            w.RemoveAt(0);
-            card.data["Grid3"] = RandomFunctions.Instance.ListToString(w);
-
-            var wi = RandomFunctions.Instance.StringToDictionary("Attack/ff0200\r\nAttack [F]/ff0200\r\nAttack [A]/ff0200\r\nAttack [R]/ff0200\r\nMove/002aff\r\nPoison/990000\r\nPoison [F]/990000\r\nPoison [A]/990000\r\nPoison [R]/990000\r\nArmor/79c073\r\nArmor [O]/79c073\r\nArmor [A]/79c073\r\nHeal/0dad00\r\nHeal [O]/0dad00\r\nHeal [A]/0dad00\r\nExhaustion/ffff00\r\nExhaustion [F]/ffff00\r\nExhaustion [A]/ffff00\r\nExhaustion [O]/ffff00\r\nRitual/cfcf6a\r\nSwift/adad23\r\nLimit/c97833\r\nArc/b900ff\r\nGuide/4d5893\r\nVault/213598\r\nBeheading/a80402\r\nKnockback/c55958\r\nSnipe/9a4b4b\r\nStopper/5f0ce2\r\nAide/ff9900\r\nGrenade/e86100\r\nArena/ffaa00\r\n", "\r\n", "/");
-
-            var w1 = RandomFunctions.Instance.StringToList(e2[1].Substring(e2[1].IndexOf(": ") + 2), "^%^");
-            var w2 = RandomFunctions.Instance.StringToList(e2[2].Substring(e2[2].IndexOf(": ") + 2), "^%^");
-            List<string> shi = new List<string>();
-            for (int i = 0; i < w1.Count; i++)
-            {
-                if (w1[i] == "True")
-                {
-                    string comp = wi.ElementAt(i).Key;
-                    if (w2[i] != "") comp += " " + w2[i];
-                    shi.Add(comp);
-                }
-            }
-            card.data["Action1"] = RandomFunctions.Instance.ListToString(shi);
-            w1 = RandomFunctions.Instance.StringToList(e2[4].Substring(e2[4].IndexOf(": ") + 2), "^%^");
-            w2 = RandomFunctions.Instance.StringToList(e2[5].Substring(e2[5].IndexOf(": ") + 2), "^%^");
-            shi = new List<string>();
-            for (int i = 0; i < w1.Count; i++)
-            {
-                if (w1[i] == "True")
-                {
-                    string comp = wi.ElementAt(i).Key;
-                    if (w2[i] != "") comp += " " + w2[i];
-                    shi.Add(comp);
-                }
-            }
-            card.data["Action2"] = RandomFunctions.Instance.ListToString(shi);
-            w1 = RandomFunctions.Instance.StringToList(e2[7].Substring(e2[7].IndexOf(": ") + 2), "^%^");
-            w2 = RandomFunctions.Instance.StringToList(e2[8].Substring(e2[8].IndexOf(": ") + 2), "^%^");
-            shi = new List<string>();
-            for (int i = 0; i < w1.Count; i++)
-            {
-                if (w1[i] == "True")
-                {
-                    string comp = wi.ElementAt(i).Key;
-                    if (w2[i] != "") comp += " " + w2[i];
-                    shi.Add(comp);
-                }
-            }
-            card.data["Action3"] = RandomFunctions.Instance.ListToString(shi);
-
-
             SendNotif("Loaded card from format SONST");
             sis = "";
-            LoadCardFromText(card.Encode());
+            LoadCardFromText(e);
         }
         else if (e.Substring(0, 5) == "OXCRD")
         {
             SendNotif("Loaded card from format OXCRD");
+            sis = "";
+            LoadCardFromText(e);
+        }
+        else
+        {
+            SendNotif("Attemping to parse card with unknown format");
             sis = "";
             LoadCardFromText(e);
         }

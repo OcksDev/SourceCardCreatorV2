@@ -7,10 +7,30 @@ using UnityEngine;
 public class Selelele : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public TextMeshProUGUI text2;
     public string FilePath;
-    public void Start()
+    public void FardStart()
     {
         text.text = GetName();
+        var e = File.ReadAllText(FilePath);
+        if(e.Length >= 5)
+        {
+            var e2 = e.Substring(0,5);
+            switch (e2)
+            {
+                case "OXCRD":
+                case "SONST":
+                    text2.text = e2;
+                    break;
+                default:
+                    text2.text = "?";
+                    break;
+            }
+        }
+        else
+        {
+            text2.text = "?";
+        }
     }
     public string GetName()
     {
@@ -60,6 +80,7 @@ public class Selelele : MonoBehaviour
     public void KillMe()
     {
         File.Delete(FilePath);
+        Gamer.Instance.ccum.Remove(this);
         Destroy(gameObject);
     }
 }
