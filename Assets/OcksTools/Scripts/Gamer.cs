@@ -279,11 +279,8 @@ public class Gamer : MonoBehaviour
         }
         for (int i = 0; i < ccum.Count; i++)
         {
-            if(ccum[i].FilePath != filePaths[i])
-            {
-                ccum[i].FilePath = filePaths[i];
-                ccum[i].FardStart();
-            }
+            ccum[i].FilePath = filePaths[i];
+            ccum[i].FardStart();
         }
         ReloadSaveSearch();
     }
