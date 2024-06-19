@@ -56,6 +56,47 @@ public class Internactct : MonoBehaviour
         }
     }
 
+    public void ChangeColor(int i)
+    {
+        var c = Carder.Instance;
+        var e = GetComponent<TMP_InputField>().text;
+        switch (i)
+        {
+            case 0:
+                c.CurrentCard.data["NameColor"] = e;
+                break;
+            case 1:
+                c.CurrentCard.data["DescriptionColor"] = e;
+                break;
+            case 2:
+                c.CurrentCard.data["HealthColor"] = e;
+                break;
+            case 3:
+                c.CurrentCard.data["ImageBGColor"] = e;
+                break;
+            case 4:
+                c.CurrentCard.data["BGColor"] = e;
+                break;
+            case 5:
+                c.CurrentCard.data["GridBGColor"] = e;
+                break;
+            case 6:
+                c.CurrentCard.data["GridSelfColor"] = e;
+                break;
+            case 7:
+                c.CurrentCard.data["GridMoveColor"] = e;
+                break;
+            case 8:
+                c.CurrentCard.data["GridInfColor"] = e;
+                break;
+            case 9:
+                c.CurrentCard.data["GridNoneColor"] = e;
+                break;
+        }
+        c.RenderCard(c.CurrentCard);
+    }
+
+
     public void UpdateHealth()
     {
         var c = Carder.Instance;

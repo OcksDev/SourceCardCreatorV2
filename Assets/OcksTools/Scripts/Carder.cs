@@ -20,6 +20,11 @@ public class Carder : MonoBehaviour
     public Image HEart;
     public TextMeshProUGUI PassivesTetx;
     public static Carder Instance;
+    public Image bg1;
+    public Image bg2;
+    public Image bg3;
+    public GameObject Sizer;
+    public float UpScale = 2f;
     private void Awake()
     {
         Instance = this;
@@ -49,6 +54,22 @@ public class Carder : MonoBehaviour
 
         Gamer.Instance.sss.text = Gamer.Instance.sis != "" ? $"Current Open File: {Gamer.Instance.sis}" : "";
 
+        title.color = HexToColor(cum.data["NameColor"]);
+        HEart.color = HexToColor(cum.data["HealthColor"]);
+        health.color = HexToColor(cum.data["HealthColor"]);
+        description.color = HexToColor(cum.data["DescriptionColor"]);
+        PassivesTetx.color = HexToColor(cum.data["DescriptionColor"]);
+        bg1.color = HexToColor(cum.data["BGColor"], "000000");
+        bg2.color = HexToColor(cum.data["BGColor"], "000000");
+        bg3.color = HexToColor(cum.data["ImageBGColor"], "767676");
+        Gamer.Instance.sexex[0] = HexToColor(cum.data["GridNoneColor"], "000000");
+        Gamer.Instance.sexex[1] = HexToColor(cum.data["GridMoveColor"], "C8C8C8");
+        Gamer.Instance.sexex[2] = HexToColor(cum.data["GridInfColor"], "767676");
+        Gamer.Instance.sexex[3] = HexToColor(cum.data["GridSelfColor"], "FFFFFF");
+        grid1.GetComponent<Image>().color = HexToColor(cum.data["GridBGColor"], "656565");
+        grid2.GetComponent<Image>().color = HexToColor(cum.data["GridBGColor"], "656565");
+        grid3.GetComponent<Image>().color = HexToColor(cum.data["GridBGColor"], "656565");
+
         string a1 = cum.data["Description"];
         string a2 = "";
         var b1 = RandomFunctions.Instance.StringToList(cum.data["Action1"]);
@@ -71,7 +92,13 @@ public class Carder : MonoBehaviour
         }
 
         description.text = ColorText(a2 + a1);
-        health.text = cum.data["Health"];
+        var aa = cum.data["Health"];
+        if (aa == "") aa = "0";
+        else if (aa == "-0")
+        {
+            aa = "";
+        }
+        health.text = aa;
 
         bool a = false;
         var b = RandomFunctions.Instance.StringToList(cum.data["Grid1"]);
@@ -221,6 +248,42 @@ public class Carder : MonoBehaviour
 
         return e;
     }
+    public static Color32 HexToColor(string hex, string fallback = "FFFFFF")
+    {
+        try
+        {
+            hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
+            hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
+            byte a = 255;//assume fully visible unless specified in hex
+            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+            byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+            byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+            //Only use alpha if the string has enough characters
+            if (hex.Length == 8)
+            {
+                a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+            }
+            return new Color32(r, g, b, a);
+        }
+        catch
+        {
+            hex = fallback;
+            hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
+            hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
+            byte a = 255;//assume fully visible unless specified in hex
+            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+            byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+            byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+            //Only use alpha if the string has enough characters
+            if (hex.Length == 8)
+            {
+                a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+            }
+            return new Color32(r, g, b, a);
+        }
+    }
+
+
     public string FindOtherShits(string e)
     {
         if (e.Length == 0) return e;
@@ -282,6 +345,16 @@ public class Card
             {"Grid1" , em},
             {"Grid2" , em},
             {"Grid3" , em},
+            {"NameColor" , ""},
+            {"DescriptionColor" , ""},
+            {"BGColor" , ""},
+            {"ImageBGColor" , ""},
+            {"HealthColor" , ""},
+            {"GridBGColor" , ""},
+            {"GridSelfColor" , ""},
+            {"GridMoveColor" , ""},
+            {"GridInfColor" , ""},
+            {"GridNoneColor" , ""},
         };
     }
     public void Decode(string e)

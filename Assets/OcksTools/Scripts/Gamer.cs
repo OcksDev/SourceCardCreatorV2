@@ -48,6 +48,9 @@ public class Gamer : MonoBehaviour
     public TextMeshProUGUI sss;
     public Toggle segsmyassdos;
     public TMP_InputField searchingforshung;
+    public TMP_InputField[] myballs;
+    public Slider sexsexss;
+    public TextMeshProUGUI sexsexsstext;
     public string sis;
     float t = 0f;
     float t2 = 0f;
@@ -84,8 +87,19 @@ public class Gamer : MonoBehaviour
             {"ImageExportPath", FileSystem.Instance.GameDirectory + "\\Images" },
             {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
             {"Notifications", "True" },
+            {"RenderScale", "1" },
         };
     }
+
+    public void UpdateRenderScale()
+    {
+        float x = sexsexss.value;
+        x /= 10;
+        settings["RenderScale"] = x.ToString();
+        SetSettings();
+        sexsexsstext.text = $"Render Scaling: {x}x";
+    }
+
     private void FixedUpdate()
     {
         if (shex)
@@ -187,6 +201,8 @@ public class Gamer : MonoBehaviour
                 settings.Add(ep.Key, ep.Value);
             }
         }
+        sexsexss.value = Mathf.RoundToInt(float.Parse(settings["RenderScale"]) * 10);
+        sexsexsstext.text = $"Render Scaling: {settings["RenderScale"]}x";
     }
 
     public void SetSettings()
@@ -227,6 +243,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["SourceParseMenu"].SetActive(checks[4]);
         Tags.refs["AddEffect"].SetActive(checks[5]);
         Tags.refs["SettingsMenu"].SetActive(checks[6]);
+        Tags.refs["ColorsMenu"].SetActive(checks[7]);
     }
 
     public void ToggleMenu(int i)
@@ -312,6 +329,7 @@ public class Gamer : MonoBehaviour
         checks[1] = false;
         checks[2] = false;
         checks[6] = false;
+        checks[7] = false;
         checks[i] = true;
 
         switch (i)
@@ -496,12 +514,29 @@ public class Gamer : MonoBehaviour
         bgfuiield.text = card.data["BGPath"];
         descfuiield.text = card.data["Description"];
         healthfuiield.text = card.data["Health"];
+        myballs[0].text = card.data["NameColor"];
+        myballs[1].text = card.data["DescriptionColor"];
+        myballs[2].text = card.data["HealthColor"];
+        myballs[3].text = card.data["ImageBGColor"];
+        myballs[4].text = card.data["BGColor"];
+        myballs[5].text = card.data["GridBGColor"];
+        myballs[6].text = card.data["GridSelfColor"];
+        myballs[7].text = card.data["GridMoveColor"];
+        myballs[8].text = card.data["GridInfColor"];
+        myballs[9].text = card.data["GridNoneColor"];
         Carder.Instance.CurrentCard = card;
         Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
         GoToExclusive(0);
+        ready = false;  
         UpdateImage(imagefuiield.text, 0);
-        UpdateImage(bgfuiield.text, 1);
+        StartCoroutine(WaitForScriggins());
         UpdateMenus();
+    }
+    bool ready = false;
+    public IEnumerator WaitForScriggins()
+    {
+        yield return new WaitUntil(() => { return ready; });
+        UpdateImage(bgfuiield.text, 1);
     }
 
     public void UpdateImage(string e = "", int i = 0)
@@ -511,8 +546,9 @@ public class Gamer : MonoBehaviour
     }
     public IEnumerator cummer(string e, int i)
     {
+        ready = false;
         if (FileSystem.Instance.DDH.Count < 1) FileSystem.Instance.DDH.Insert(0, new DownloadDataHandler());
-        if (e.Contains(".png") || e.Contains(".jpg") || e.Contains(".jpeg"))
+        if (e.ToLower().Contains(".png") || e.ToLower().Contains(".jpg") || e.ToLower().Contains(".jpeg"))
         {
             Debug.Log("Valid Image");
             StartCoroutine(FileSystem.Instance.GetImage(e, 0));
@@ -564,7 +600,7 @@ public class Gamer : MonoBehaviour
                 Carder.Instance.CurrentCard.data["BGPath"] = "";
             }
         }
-
+        ready = true;
     }
     public IEnumerator OpenFileEELol(int i)
     {
