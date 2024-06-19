@@ -45,6 +45,7 @@ public class Gamer : MonoBehaviour
     public GameObject notif;
     public TextMeshProUGUI sss;
     public Toggle segsmyassdos;
+    public TMP_InputField searchingforshung;
     public string sis;
     float t = 0f;
     float t2 = 0f;
@@ -220,6 +221,7 @@ public class Gamer : MonoBehaviour
             switch (i)
             {
                 case 3:
+                    searchingforshung.text = "";
                     ReloadSaveFiles();
                     break;
             }
@@ -249,7 +251,19 @@ public class Gamer : MonoBehaviour
                 ccum[i].FardStart();
             }
         }
+        ReloadSaveSearch();
     }
+
+    public void ReloadSaveSearch()
+    {
+        string e = searchingforshung.text;
+        foreach (var s in ccum)
+        {
+            s.gameObject.SetActive(s.Nm.ToLower().Contains(e.ToLower()));
+        }
+    }
+
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

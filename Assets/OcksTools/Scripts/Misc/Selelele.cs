@@ -9,9 +9,11 @@ public class Selelele : MonoBehaviour
     public TextMeshProUGUI text;
     public TextMeshProUGUI text2;
     public string FilePath;
+    public string Nm = "";
     public void FardStart()
     {
-        text.text = GetName();
+        Nm = GetName();
+        text.text = Nm;
         var e = File.ReadAllText(FilePath);
         if(e.Length >= 5)
         {
