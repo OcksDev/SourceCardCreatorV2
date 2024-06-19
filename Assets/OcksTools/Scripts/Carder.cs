@@ -17,6 +17,8 @@ public class Carder : MonoBehaviour
     public GameObject grid1;
     public GameObject grid2;
     public GameObject grid3;
+    public Image HEart;
+    public TextMeshProUGUI PassivesTetx;
     public static Carder Instance;
     private void Awake()
     {
@@ -37,10 +39,13 @@ public class Carder : MonoBehaviour
     public void RenderCard(Card cum)
     {
         Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
-        Gamer.Instance.settings = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\Settings.txt"), "\n", ": ");
+        Gamer.Instance.ReadSettings();
         Gamer.Instance.ValidMods = RandomFunctions.Instance.StringToList(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"), "\n");
         
         title.text = cum.data["Name"];
+        HEart.gameObject.SetActive(cum.data["Health"] != "-");
+        health.gameObject.SetActive(cum.data["Health"] != "-");
+        PassivesTetx.gameObject.SetActive(cum.data["Description"] != "" || cum.data["Action1"] != "" || cum.data["Action2"] != "" || cum.data["Action3"] != "");
 
         Gamer.Instance.sss.text = Gamer.Instance.sis != "" ? $"Current Open File: {Gamer.Instance.sis}" : "";
 
@@ -265,10 +270,12 @@ public class Card
 
         return new Dictionary<string, string>()
         {
+            {"OXCRD_Ver" , "3"},
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
             {"Health" , "0"},
             {"ImagePath" , ""},
+            {"BGPath" , ""},
             {"Action1" , ""},
             {"Action2" , ""},
             {"Action3" , ""},

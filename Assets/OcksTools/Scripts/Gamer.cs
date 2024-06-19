@@ -13,10 +13,12 @@ using static System.Net.Mime.MediaTypeNames;
 public class Gamer : MonoBehaviour
 {
     public TMP_InputField imagefuiield;
+    public TMP_InputField bgfuiield;
     public TMP_InputField namefuiield;
     public TMP_InputField descfuiield;
     public TMP_InputField healthfuiield;
     public UnityEngine.UI.Image sex;
+    public UnityEngine.UI.Image hotsex;
     public bool[] checks = new bool[20];
     public Sprite spsps;
     public GameObject ParentOfSex;
@@ -67,6 +69,15 @@ public class Gamer : MonoBehaviour
         {
             FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\EffectMods.txt", RandomFunctions.Instance.ListToString(ValidMods, "\n"), true);
         }
+        SetDefaultSettings();
+        if (!File.Exists(FileSystem.Instance.GameDirectory + "\\Settings.txt"))
+        {
+            FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\Settings.txt", RandomFunctions.Instance.DictionaryToString(settings, "\n", ": "), true);
+        }
+
+    }
+    public void SetDefaultSettings()
+    {
         settings = new Dictionary<string, string>()
         {
             {"ColorText", "True" },
@@ -74,13 +85,7 @@ public class Gamer : MonoBehaviour
             {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
             {"Notifications", "True" },
         };
-        if (!File.Exists(FileSystem.Instance.GameDirectory + "\\Settings.txt"))
-        {
-            FileSystem.Instance.WriteFile(FileSystem.Instance.GameDirectory + "\\Settings.txt", RandomFunctions.Instance.DictionaryToString(settings, "\n", ": "), true);
-        }
-
     }
-
     private void FixedUpdate()
     {
         if (shex)
@@ -169,7 +174,19 @@ public class Gamer : MonoBehaviour
     }
     public void ReadSettings()
     {
-        settings = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\Settings.txt"), "\n", ": ");
+        SetDefaultSettings();
+        var e = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\Settings.txt"), "\n", ": ");
+        foreach(var ep in e)
+        {
+            if (settings.ContainsKey(ep.Key))
+            {
+                settings[ep.Key] = ep.Value;
+            }
+            else
+            {
+                settings.Add(ep.Key, ep.Value);
+            }
+        }
     }
 
     public void SetSettings()
@@ -403,7 +420,31 @@ public class Gamer : MonoBehaviour
     public void SetImage(string e)
     {
         imagefuiield.text = e;
-        UpdateImage();
+        UpdateImage(e, 0);
+    }
+    public void SetBGImage(string e)
+    {
+        bgfuiield.text = e;
+        UpdateImage(e, 1);
+    }
+
+    public void UPI()
+    {
+        if(imagefuiield.text == "")
+        {
+            sex.sprite = spsps;
+            return;
+        }
+        UpdateImage(imagefuiield.text, 0);
+    }
+    public void UPI2()
+    {
+        if (bgfuiield.text == "")
+        {
+            hotsex.sprite = spsps;
+            return;
+        }
+        UpdateImage(bgfuiield.text, 1);
     }
 
     public void LoadCardFromPath(string path)
@@ -452,26 +493,29 @@ public class Gamer : MonoBehaviour
         var card = new Card(e);
         namefuiield.text = card.data["Name"];
         imagefuiield.text = card.data["ImagePath"];
+        bgfuiield.text = card.data["BGPath"];
         descfuiield.text = card.data["Description"];
         healthfuiield.text = card.data["Health"];
         Carder.Instance.CurrentCard = card;
         Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
         GoToExclusive(0);
-        UpdateImage();
+        UpdateImage(imagefuiield.text, 0);
+        UpdateImage(bgfuiield.text, 1);
         UpdateMenus();
     }
 
-    public void UpdateImage()
+    public void UpdateImage(string e = "", int i = 0)
     {
-        StartCoroutine(cummer());
+        if (e == "") e = imagefuiield.text;
+        StartCoroutine(cummer(e, i));
     }
-    public IEnumerator cummer()
+    public IEnumerator cummer(string e, int i)
     {
         if (FileSystem.Instance.DDH.Count < 1) FileSystem.Instance.DDH.Insert(0, new DownloadDataHandler());
-        if(imagefuiield.text.Contains(".png") || imagefuiield.text.Contains(".jpg") || imagefuiield.text.Contains(".jpeg"))
+        if (e.Contains(".png") || e.Contains(".jpg") || e.Contains(".jpeg"))
         {
             Debug.Log("Valid Image");
-            StartCoroutine(FileSystem.Instance.GetImage(imagefuiield.text, 0));
+            StartCoroutine(FileSystem.Instance.GetImage(e, 0));
 
             yield return new WaitUntil(() => { return FileSystem.Instance.DDH[0].CompletedDownload; });
             Debug.Log("Image Found");
@@ -480,21 +524,45 @@ public class Gamer : MonoBehaviour
                 Debug.Log("Doing ur mom");
                 var tex = (Texture2D)FileSystem.Instance.DDH[0].Texture;
                 Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
-                sex.sprite = sprite;
-                Carder.Instance.CurrentCard.data["ImagePath"] = imagefuiield.text;
+                if (i == 0)
+                {
+                    sex.sprite = sprite;
+                    Carder.Instance.CurrentCard.data["ImagePath"] = e;
+                }
+                else
+                {
+                    hotsex.sprite = sprite;
+                    Carder.Instance.CurrentCard.data["BGPath"] = e;
+                }
             }
             else
             {
                 Debug.Log("Failed doing mom");
-                sex.sprite = spsps;
-                Carder.Instance.CurrentCard.data["ImagePath"] = "";
+                if (i == 0)
+                {
+                    sex.sprite = spsps;
+                    Carder.Instance.CurrentCard.data["ImagePath"] = "";
+                }
+                else
+                {
+                    hotsex.sprite = spsps;
+                    Carder.Instance.CurrentCard.data["BGPath"] = "";
+                }
             }
         }
         else
         {
             Debug.Log("Faailed valid file");
-            sex.sprite = spsps;
-            Carder.Instance.CurrentCard.data["ImagePath"] = "";
+            if (i == 0)
+            {
+                sex.sprite = spsps;
+                Carder.Instance.CurrentCard.data["ImagePath"] = "";
+            }
+            else
+            {
+                hotsex.sprite = spsps;
+                Carder.Instance.CurrentCard.data["BGPath"] = "";
+            }
         }
 
     }
@@ -526,6 +594,17 @@ public class Gamer : MonoBehaviour
                         break;
                     default:
                         SetImage(readout);
+                        break;
+                }
+                break;
+            case 1:
+                switch (readout)
+                {
+                    case "BAD":
+                        SetBGImage("");
+                        break;
+                    default:
+                        SetBGImage(readout);
                         break;
                 }
                 break;
