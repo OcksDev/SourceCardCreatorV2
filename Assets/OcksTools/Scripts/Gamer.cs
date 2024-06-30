@@ -54,6 +54,7 @@ public class Gamer : MonoBehaviour
     public TextMeshProUGUI sexsexsstext;
     public TextMeshProUGUI drp4;
     public TextMeshProUGUI drp5;
+    public TMP_InputField rawshit;
     public string sis;
     float t = 0f;
     float t2 = 0f;
@@ -259,6 +260,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["AddEffect"].SetActive(checks[5]);
         Tags.refs["SettingsMenu"].SetActive(checks[6]);
         Tags.refs["ColorsMenu"].SetActive(checks[7]);
+        Tags.refs["RawMenu"].SetActive(checks[8]);
     }
 
     public void ToggleMenu(int i)
@@ -336,12 +338,13 @@ public class Gamer : MonoBehaviour
 
     public void GoToExclusive(int i)
     {
-        checks[5] = false;
         checks[0] = false;
         checks[1] = false;
         checks[2] = false;
+        checks[5] = false;
         checks[6] = false;
         checks[7] = false;
+        checks[8] = false;
         checks[i] = true;
 
         switch (i)
@@ -367,14 +370,31 @@ public class Gamer : MonoBehaviour
                 break;
             case 6:
                 ReadSettings();
-                segsmyass.isOn = settings["ColorText"]=="True";
+                segsmyass.isOn = settings["ColorText"] == "True";
                 shungite.text = settings["ImageExportPath"];
                 shungite2.text = settings["SaveFilePath"];
                 segsmyassdos.isOn = settings["Notifications"] == "True";
                 break;
+            case 8:
+                rawshit.text = Carder.Instance.CurrentCard.Encode();
+                pshexballs.text = "";
+                break;
         }
 
         UpdateMenus();
+    }
+    public TextMeshProUGUI pshexballs;
+    public void SetCardFromRawEdit()
+    {
+        try
+        {
+            LoadCardFromText(rawshit.text, 1);
+            pshexballs.text = "";
+        }
+        catch
+        {
+            pshexballs.text = "<b>- Invalid Card Data -</b>";
+        }
     }
 
     public void UpdateActionLists()
@@ -566,11 +586,19 @@ public class Gamer : MonoBehaviour
         if (ac.amount == -1) drp3.text = "";
     }
 
-    public void LoadCardFromText(string e)
+
+    public void LoadCardFromText(string e) { LoadCardFromText(e,0); }
+
+    public void LoadCardFromText(string e, int mod)
     {
-        checks[3] = false;
-        checks[4] = false;
-        checks[5] = false;
+        if(mod == 0)
+        {
+            checks[3] = false;
+            checks[4] = false;
+            checks[5] = false;
+        }
+        string a = Carder.Instance.CurrentCard.data["ImagePath"];
+        string b = Carder.Instance.CurrentCard.data["BGPath"];
         var card = new Card(e);
         namefuiield.text = card.data["Name"];
         imagefuiield.text = card.data["ImagePath"];
@@ -589,10 +617,25 @@ public class Gamer : MonoBehaviour
         myballs[9].text = card.data["GridNoneColor"];
         Carder.Instance.CurrentCard = card;
         Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
+        if(mod==0)
         GoToExclusive(0);
         ready = false;  
-        UpdateImage(imagefuiield.text, 0);
-        StartCoroutine(WaitForScriggins());
+        if(a != card.data["ImagePath"])
+        {
+            UpdateImage(imagefuiield.text, 0);
+            if(b != card.data["BGPath"])
+            {
+                StartCoroutine(WaitForScriggins());
+            }
+        }
+        else
+        {
+            if (b != card.data["BGPath"])
+            {
+                UpdateImage(bgfuiield.text, 1);
+            }
+        }
+        if(mod==0)
         UpdateMenus();
     }
     bool ready = false;

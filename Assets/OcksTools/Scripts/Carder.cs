@@ -41,6 +41,8 @@ public class Carder : MonoBehaviour
     List<Image> grid2ers= new List<Image>();
     List<Image> grid3ers= new List<Image>();
 
+
+    public void RenderCard() { RenderCard(CurrentCard); }
     public void RenderCard(Card cum)
     {
         Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
@@ -110,7 +112,6 @@ public class Carder : MonoBehaviour
                 break;
             }
         }
-        grid1.SetActive(a);
         if (a)
         {
             if (grid1ers.Count < 1)
@@ -120,6 +121,11 @@ public class Carder : MonoBehaviour
                 {
                     if (c != w) grid1ers.Add(c);
                 }
+            }
+            if (b.Count < grid1ers.Count)
+            {
+                a = false;
+                goto ppshex1;
             }
             for (int i = 0; i < grid1ers.Count; i++)
             {
@@ -140,7 +146,8 @@ public class Carder : MonoBehaviour
                 }
             }
         }
-
+    ppshex1:
+        grid1.SetActive(a);
         a = false;
         b = RandomFunctions.Instance.StringToList(cum.data["Grid2"]);
         foreach (var c in b)
@@ -151,7 +158,6 @@ public class Carder : MonoBehaviour
                 break;
             }
         }
-        grid2.SetActive(a);
         if (a)
         {
             if (grid2ers.Count < 1)
@@ -161,6 +167,11 @@ public class Carder : MonoBehaviour
                 {
                     if (c != w) grid2ers.Add(c);
                 }
+            }
+            if (b.Count < grid2ers.Count)
+            {
+                a = false;
+                goto ppshex2;
             }
             for (int i = 0; i < grid2ers.Count; i++)
             {
@@ -181,7 +192,8 @@ public class Carder : MonoBehaviour
                 }
             }
         }
-
+        ppshex2:
+        grid2.SetActive(a);
         a = false;
         b = RandomFunctions.Instance.StringToList(cum.data["Grid3"]);
         foreach (var c in b)
@@ -192,7 +204,6 @@ public class Carder : MonoBehaviour
                 break;
             }
         }
-        grid3.SetActive(a);
         if (a)
         {
             if (grid3ers.Count < 1)
@@ -202,6 +213,11 @@ public class Carder : MonoBehaviour
                 {
                     if (c != w) grid3ers.Add(c);
                 }
+            }
+            if (b.Count < grid3ers.Count)
+            {
+                a = false;
+                goto ppshex3;
             }
             for (int i = 0; i < grid3ers.Count; i++)
             {
@@ -222,7 +238,8 @@ public class Carder : MonoBehaviour
                 }
             }
         }
-
+        ppshex3:
+        grid3.SetActive(a);
     }
 
 
