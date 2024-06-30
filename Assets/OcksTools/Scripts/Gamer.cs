@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -51,6 +52,8 @@ public class Gamer : MonoBehaviour
     public TMP_InputField[] myballs;
     public Slider sexsexss;
     public TextMeshProUGUI sexsexsstext;
+    public TextMeshProUGUI drp4;
+    public TextMeshProUGUI drp5;
     public string sis;
     float t = 0f;
     float t2 = 0f;
@@ -137,6 +140,9 @@ public class Gamer : MonoBehaviour
     {
         checks[0] = true;
         UpdateMenus();
+
+        var rah = new ActionFart("Attack [F]");
+        Debug.Log($"Crd: {rah.action}, {rah.mod}, {rah.amount}");
     }
 
     public void SendNotif(string e)
@@ -211,8 +217,15 @@ public class Gamer : MonoBehaviour
     }
 
     public int applu = 0;
+    public int modlu = 0;
+
     public void GoToAdder(int i)
     {
+        GoToAdder(i, 0);
+    }
+    public void GoToAdder(int i, int mode = 0)
+    {
+        modlu = mode;
         applu = i;
         checks[5] = true;
         drp1.options = new List<TMP_Dropdown.OptionData>();
@@ -230,6 +243,8 @@ public class Gamer : MonoBehaviour
         }
         drp1.value = -1;
         drp2.value = -1;
+        drp4.text = mode == 0 ? "Add Effect" : "Edit Effect";
+        drp5.text = mode == 0 ? "Add" : "Save";
         UpdateMenus();
     }
 
@@ -415,15 +430,40 @@ public class Gamer : MonoBehaviour
             e += " " + e2;
         }
         var cd = Carder.Instance.CurrentCard;
-        var x = RandomFunctions.Instance.StringToList( cd.data[$"Action{applu+1}"]);
-        x.Add(e);
+
+        var x = RandomFunctions.Instance.StringToList(cd.data[$"Action{applu + 1}"]);
+        if (x.Count > 0 && x[0] == "") x.RemoveAt(0);
+        switch (modlu)
+        {
+            default:
+                x.Add(e);
+                break;
+            case 1:
+                x[gggg] = e;
+                break;
+        }
         cd.data[$"Action{applu + 1}"] = RandomFunctions.Instance.ListToString(x);
+
         drp3.text = "";
         Carder.Instance.RenderCard(cd);
         checks[5] = false;
         UpdateActionLists();
         UpdateMenus();
     }
+
+    public void SwapAction(int i)
+    {
+        var cd = Carder.Instance.CurrentCard;
+
+        var a = cd.data[$"Action{i + 1}"];
+        cd.data[$"Action{i + 1}"] = cd.data[$"Action{i + 2}"];
+        cd.data[$"Action{i + 2}"] = a;
+        a = cd.data[$"Grid{i + 1}"];
+        cd.data[$"Grid{i + 1}"] = cd.data[$"Grid{i + 2}"];
+        cd.data[$"Grid{i + 2}"] = a;
+        Carder.Instance.RenderCard(cd);
+    }
+
 
 
     public void PickFile(int i)
@@ -499,6 +539,32 @@ public class Gamer : MonoBehaviour
         }
     }
 
+
+    int gggg = -1;
+    public void EditAction(int i, string action)
+    {
+        gggg = i;
+        var cd = Carder.Instance;
+        var l = RandomFunctions.Instance.StringToList(cd.CurrentCard.data[action]);
+        if (l.Count > 0 && l[0] == "") l.RemoveAt(0);
+        var ac = new ActionFart(l[i]);
+        GoToAdder(int.Parse(action[action.Length-1].ToString())-1, 1);
+        if (ValidEffects.ContainsKey(ac.action))
+        {
+            for(int z = 0; z < ValidEffects.Count; z++)
+            {
+                if (ValidEffects.ElementAt(z).Key == ac.action)
+                {
+                    drp1.value = z;
+                    break;
+                }
+            }
+        }
+        if (ValidMods.Contains(ac.mod)) drp2.value = ValidMods.IndexOf(ac.mod) + 1;
+        drp3.text = ac.amount.ToString();
+        if (ac.amount == 0) drp3.text = "";
+        if (ac.amount == -1) drp3.text = "";
+    }
 
     public void LoadCardFromText(string e)
     {

@@ -18,4 +18,9 @@ public class SegsWanker : MonoBehaviour
         Gamer.Instance.UpdateActionLists();
         Carder.Instance.RenderCard(card);
     }
+
+    public void EditMe()
+    {
+        Gamer.Instance.EditAction(index, Action);
+    }
 }

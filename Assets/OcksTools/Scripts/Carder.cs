@@ -479,3 +479,35 @@ public class Card
         return "OXCRD\n<> " + RandomFunctions.Instance.DictionaryToString(data, "\n<> ", ": ");
     }
 }
+
+
+
+public class ActionFart
+{
+    public string action = "";
+    public string mod = "";
+    public int amount = -1;
+    public ActionFart(string e)
+    {
+        int i = e.LastIndexOf(" ");
+        if (i >= 0)
+        {
+            var f = e.Substring(i + 1);
+            if (int.TryParse(f, out amount))
+            {
+                e = e.Substring(0, i);
+            }
+        }
+        i = e.LastIndexOf(" ");
+        if (i >= 0)
+        {
+            var f = e.Substring(i + 1);
+            if (Gamer.Instance.ValidMods.Contains(f))
+            {
+                mod = f;
+                e = e.Substring(0, i);
+            }
+        }
+        action = e;
+    }
+}
