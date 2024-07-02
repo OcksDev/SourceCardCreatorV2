@@ -56,6 +56,19 @@ public class Internactct : MonoBehaviour
         }
     }
 
+    public void PullGrid(int i)
+    {
+        var c = Carder.Instance;
+        var x = RandomFunctions.Instance.StringToList(c.CurrentCard.data[$"Grid{i + 1}"]);
+        foreach (var a in Gamer.Instance.cums) { a.state = 0; }
+        for (int j = 0; j < x.Count; j++)
+        {
+            if (x[j]!="")Gamer.Instance.cums[j].state = int.Parse(x[j]);
+        }
+        foreach (var a in Gamer.Instance.cums) { a.UpdateColor(); }
+    }
+
+
     public void ChangeColor(int i)
     {
         var c = Carder.Instance;

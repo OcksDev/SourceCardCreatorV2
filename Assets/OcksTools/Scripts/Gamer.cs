@@ -261,6 +261,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["SettingsMenu"].SetActive(checks[6]);
         Tags.refs["ColorsMenu"].SetActive(checks[7]);
         Tags.refs["RawMenu"].SetActive(checks[8]);
+        Tags.refs["EffectMenu"].SetActive(checks[9]);
     }
 
     public void ToggleMenu(int i)
@@ -345,6 +346,7 @@ public class Gamer : MonoBehaviour
         checks[6] = false;
         checks[7] = false;
         checks[8] = false;
+        checks[9] = false;
         checks[i] = true;
 
         switch (i)
