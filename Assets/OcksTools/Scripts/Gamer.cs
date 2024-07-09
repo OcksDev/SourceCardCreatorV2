@@ -55,6 +55,9 @@ public class Gamer : MonoBehaviour
     public TextMeshProUGUI drp4;
     public TextMeshProUGUI drp5;
     public TMP_InputField rawshit;
+    public Toggle segsmygigadick;
+    public GameObject wankerfucker;
+    public GameObject wankerfuckerchild;
     public string sis;
     float t = 0f;
     float t2 = 0f;
@@ -92,6 +95,7 @@ public class Gamer : MonoBehaviour
             {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
             {"Notifications", "True" },
             {"RenderScale", "1" },
+            {"LegacyEffects", "False" },
         };
     }
 
@@ -146,6 +150,11 @@ public class Gamer : MonoBehaviour
         Debug.Log($"Crd: {rah.action}, {rah.mod}, {rah.amount}");
     }
 
+    public void SetEffects()
+    {
+        ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
+    }
+
     public void SendNotif(string e)
     {
         if (settings["Notifications"] != "True") return;
@@ -173,6 +182,11 @@ public class Gamer : MonoBehaviour
             case "Notif":
                 settings["Notifications"] = segsmyassdos.isOn ? "True" : "False";
                 SetSettings();
+                break;
+            case "Legacy":
+                settings["LegacyEffects"] = segsmygigadick.isOn ? "True" : "False";
+                SetSettings();
+                Carder.Instance.RenderCard();
                 break;
         }
     }
@@ -336,7 +350,7 @@ public class Gamer : MonoBehaviour
             }
         }
     }
-
+    public List<EffectSegsgs> pp = new List<EffectSegsgs>();
     public void GoToExclusive(int i)
     {
         checks[0] = false;
@@ -376,15 +390,47 @@ public class Gamer : MonoBehaviour
                 shungite.text = settings["ImageExportPath"];
                 shungite2.text = settings["SaveFilePath"];
                 segsmyassdos.isOn = settings["Notifications"] == "True";
+                segsmygigadick.isOn = settings["LegacyEffects"] == "True";
                 break;
             case 8:
                 rawshit.text = Carder.Instance.CurrentCard.Encode();
                 pshexballs.text = "";
                 break;
+            case 9:
+                SetEffects();
+                for (int iz = 0; iz < pp.Count; iz++)
+                {
+                    Destroy(pp[iz].gameObject);
+                    pp.RemoveAt(0);
+                    iz--;
+                }
+                for (int iz = 0; iz < ValidEffects.Count; iz++)
+                {
+                    var x = ValidEffects.ElementAt(iz); 
+                    var e = Instantiate(wankerfuckerchild, wankerfucker.transform).GetComponent<EffectSegsgs>();
+                    pp.Add(e);
+                    e.key = x.Key;
+                    e.name.text = x.Key; 
+                    e.color.text = x.Value;
+                    e.UpdateDisplayCOlor();
+                }
+                break;
         }
 
         UpdateMenus();
     }
+
+    public void ASpawnNewEffectSegs()
+    {
+        var e = Instantiate(wankerfuckerchild, wankerfucker.transform).GetComponent<EffectSegsgs>();
+        pp.Add(e);
+        e.key = "";
+        e.name.text = "";
+        e.color.text = "FFFFFF";
+        e.UpdateDisplayCOlor();
+    }
+
+
     public TextMeshProUGUI pshexballs;
     public void SetCardFromRawEdit()
     {

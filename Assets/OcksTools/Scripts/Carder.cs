@@ -45,7 +45,7 @@ public class Carder : MonoBehaviour
     public void RenderCard() { RenderCard(CurrentCard); }
     public void RenderCard(Card cum)
     {
-        Gamer.Instance.ValidEffects = RandomFunctions.Instance.StringToDictionary(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectList.txt"), "\n", ": ");
+        Gamer.Instance.SetEffects();
         Gamer.Instance.ReadSettings();
         Gamer.Instance.ValidMods = RandomFunctions.Instance.StringToList(File.ReadAllText(FileSystem.Instance.GameDirectory + "\\EffectMods.txt"), "\n");
         
@@ -78,19 +78,19 @@ public class Carder : MonoBehaviour
         if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
         if (b1.Count > 0 && b1[0] != "")
         {
-            a2 += "Action 1: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+            a2 += "Action 1: " + RandomFunctions.Instance.ListToString(ActionFuckMyList(b1)) + "\n";
         }
         b1 = RandomFunctions.Instance.StringToList(cum.data["Action2"]);
         if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
         if (b1.Count > 0 && b1[0] != "")
         {
-            a2 += "Action 2: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+            a2 += "Action 2: " + RandomFunctions.Instance.ListToString(ActionFuckMyList(b1)) + "\n";
         }
         b1 = RandomFunctions.Instance.StringToList(cum.data["Action3"]);
         if (b1.Count > 0 && b1[0] == "") b1.RemoveAt(0);
         if (b1.Count > 0 && b1[0] != "")
         {
-            a2 += "Action 3: " + RandomFunctions.Instance.ListToString(b1) + "\n";
+            a2 += "Action 3: " + RandomFunctions.Instance.ListToString(ActionFuckMyList(b1)) + "\n";
         }
 
         description.text = ColorText(a2 + a1);
@@ -265,6 +265,22 @@ public class Carder : MonoBehaviour
 
         return e;
     }
+
+    public List<string> ActionFuckMyList(List<string> sex)
+    {
+        if (Gamer.Instance.settings["LegacyEffects"] != "True")
+        {
+            for(int i = 0; i < sex.Count; i++)
+            {
+                sex[i] = new ActionFart(sex[i]).action;
+            }
+        }
+        return sex;
+    }
+
+
+
+
     public static Color32 HexToColor(string hex, string fallback = "FFFFFF")
     {
         try
