@@ -32,9 +32,14 @@ public class Carder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cards.Add(new Card(""));
-        CurrentCard = cards[0];
-        RenderCard(CurrentCard);
+        CurrentCard = new Card("");
+        StartCoroutine(Shart());
+    }
+
+    public IEnumerator Shart()
+    {
+        yield return new WaitForFixedUpdate();
+        Gamer.Instance.NewCard();
     }
 
     List<Image> grid1ers= new List<Image>();
@@ -369,7 +374,7 @@ public class Card
             {"OXCRD_Ver" , "3"},
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
-            {"Health" , "0"},
+            {"Health" , "-"},
             {"ImagePath" , ""},
             {"BGPath" , ""},
             {"Action1" , ""},

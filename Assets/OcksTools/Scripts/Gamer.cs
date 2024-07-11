@@ -145,9 +145,6 @@ public class Gamer : MonoBehaviour
     {
         checks[0] = true;
         UpdateMenus();
-
-        var rah = new ActionFart("Attack [F]");
-        Debug.Log($"Crd: {rah.action}, {rah.mod}, {rah.amount}");
     }
 
     public void SetEffects()
@@ -645,8 +642,14 @@ public class Gamer : MonoBehaviour
             checks[4] = false;
             checks[5] = false;
         }
-        string a = Carder.Instance.CurrentCard.data["ImagePath"];
-        string b = Carder.Instance.CurrentCard.data["BGPath"];
+        string a = "";
+        string b =  "";
+        if (Carder.Instance.CurrentCard != null)
+        {
+
+            a = Carder.Instance.CurrentCard.data["ImagePath"];
+            b = Carder.Instance.CurrentCard.data["BGPath"];
+        }
         var card = new Card(e);
         namefuiield.text = card.data["Name"];
         imagefuiield.text = card.data["ImagePath"];
