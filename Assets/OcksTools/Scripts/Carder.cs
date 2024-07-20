@@ -25,6 +25,8 @@ public class Carder : MonoBehaviour
     public Image bg3;
     public GameObject Sizer;
     public float UpScale = 2f;
+    public Sprite sexesex;
+    public Image insisinsii;
     private void Awake()
     {
         Instance = this;
@@ -97,6 +99,8 @@ public class Carder : MonoBehaviour
         {
             a2 += "Action 3: " + RandomFunctions.Instance.ListToString(ActionFuckMyList(b1)) + "\n";
         }
+
+        insisinsii.sprite = sexesex;
 
         description.text = ColorText(a2 + a1);
         var aa = cum.data["Health"];
@@ -371,12 +375,13 @@ public class Card
 
         return new Dictionary<string, string>()
         {
-            {"OXCRD_Ver" , "3"},
+            {"OXCRD_Ver" , "5"},
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
             {"Health" , "-"},
             {"ImagePath" , ""},
             {"BGPath" , ""},
+            {"InsigniaPath" , ""},
             {"Action1" , ""},
             {"Action2" , ""},
             {"Action3" , ""},

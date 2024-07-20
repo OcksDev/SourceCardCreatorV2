@@ -44,6 +44,7 @@ public class FileSystem : MonoBehaviour
         CreateFolder(GameDirectory);
         CreateFolder(GameDirectory+"/Saves");
         CreateFolder(GameDirectory+"/Images");
+        CreateFolder(GameDirectory+"/Insignias");
 
         WriteFile(FileLocations[0], "", false);
         GameName = $"CardCreatorV2 {GameVer}";

@@ -43,6 +43,7 @@ public class Gamer : MonoBehaviour
     public Dictionary<string, string> settings;
     public TMP_InputField shungite;
     public TMP_InputField shungite2;
+    public TMP_InputField shungite3;
     public GameObject pt1;
     public GameObject pt2;
     public GameObject notif;
@@ -93,6 +94,7 @@ public class Gamer : MonoBehaviour
             {"ColorText", "True" },
             {"ImageExportPath", FileSystem.Instance.GameDirectory + "\\Images" },
             {"SaveFilePath", FileSystem.Instance.GameDirectory + "\\Saves" },
+            {"InsigniaFilePath", FileSystem.Instance.GameDirectory + "\\Insignias" },
             {"Notifications", "True" },
             {"RenderScale", "1" },
             {"LegacyEffects", "False" },
@@ -145,6 +147,7 @@ public class Gamer : MonoBehaviour
     {
         checks[0] = true;
         UpdateMenus();
+        ReloadInsignias();
     }
 
     public void SetEffects()
@@ -193,7 +196,12 @@ public class Gamer : MonoBehaviour
         settings["ImageExportPath"] = shungite.text;
         SetSettings();
     }
-    
+    public void SetInsigPath()
+    {
+        settings["InsigniaFilePath"] = shungite3.text;
+        SetSettings();
+    }
+
     public void SetSavePath()
     {
         settings["SaveFilePath"] = shungite2.text;
@@ -273,6 +281,7 @@ public class Gamer : MonoBehaviour
         Tags.refs["ColorsMenu"].SetActive(checks[7]);
         Tags.refs["RawMenu"].SetActive(checks[8]);
         Tags.refs["EffectMenu"].SetActive(checks[9]);
+        Tags.refs["InsigMenu"].SetActive(checks[10]);
     }
 
     public void ToggleMenu(int i)
@@ -290,6 +299,72 @@ public class Gamer : MonoBehaviour
             }
         }
         UpdateMenus();
+    }
+
+    public GameObject Insigholder;
+    public GameObject Insigsperm;
+
+    public void ReloadInsignias()
+    {
+        Carder.Instance.sexesex = spsps;
+        var e = new List<string>(Directory.GetFiles(settings["InsigniaFilePath"], "*.png", SearchOption.AllDirectories));
+        var e2 = new List<string>(Directory.GetFiles(settings["InsigniaFilePath"], "*.jpeg", SearchOption.AllDirectories));
+        var e3 = new List<string>(Directory.GetFiles(settings["InsigniaFilePath"], "*.jpg", SearchOption.AllDirectories));
+        foreach (var f in e2)
+        {
+            e.Add(f);
+        }
+        foreach (var f in e3)
+        {
+            e.Add(f);
+        }
+
+        foreach(var a in insigs)
+        {
+            Destroy(a.gameObject);
+        }
+        insigs.Clear();
+        Carder.Instance.RenderCard();
+        var fs = FileSystem.Instance;
+        while (fs.DDH.Count-1 < e.Count)
+        {
+            fs.DDH.Add(new DownloadDataHandler());
+        }
+        int i = 0;
+        SpawnInsignia(spsps, "");
+        foreach (var insuspath in e)
+        {
+            i++;
+            StartCoroutine(FileSystem.Instance.GetImage(insuspath, i));
+        }
+        i = 0;
+        foreach(var a in e)
+        {
+            i++;
+            StartCoroutine(WaitForSex(i, a));
+        }
+    }
+
+
+    public List<InSigMySexyBooty> insigs = new List<InSigMySexyBooty>();
+
+    public IEnumerator WaitForSex(int i, string aaaa)
+    {
+        var fs = FileSystem.Instance;
+        yield return new WaitUntil(() => { return fs.DDH[i].CompletedDownload; });
+        var tex = (Texture2D)FileSystem.Instance.DDH[i].Texture;
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
+        SpawnInsignia(sprite, aaaa);
+    }
+
+    public void SpawnInsignia(Sprite sexs, string aaaa)
+    {
+        var fs = FileSystem.Instance;
+        var wenis = Instantiate(Insigsperm, Insigholder.transform).GetComponent<InSigMySexyBooty>();
+        insigs.Add(wenis);
+        wenis.sex.sprite = sexs;
+        wenis.path = aaaa;
+        wenis.FardStart();
     }
 
     public List<Selelele> ccum = new List<Selelele>();
@@ -358,6 +433,7 @@ public class Gamer : MonoBehaviour
         checks[7] = false;
         checks[8] = false;
         checks[9] = false;
+        checks[10] = false;
         checks[i] = true;
 
         switch (i)
@@ -386,6 +462,7 @@ public class Gamer : MonoBehaviour
                 segsmyass.isOn = settings["ColorText"] == "True";
                 shungite.text = settings["ImageExportPath"];
                 shungite2.text = settings["SaveFilePath"];
+                shungite3.text = settings["InsigniaFilePath"];
                 segsmyassdos.isOn = settings["Notifications"] == "True";
                 segsmygigadick.isOn = settings["LegacyEffects"] == "True";
                 break;
@@ -666,7 +743,12 @@ public class Gamer : MonoBehaviour
         myballs[7].text = card.data["GridMoveColor"];
         myballs[8].text = card.data["GridInfColor"];
         myballs[9].text = card.data["GridNoneColor"];
+        Carder.Instance.sexesex = spsps;
         Carder.Instance.CurrentCard = card;
+        foreach (var inin in insigs)
+        {
+            inin.FardStart();
+        }
         Carder.Instance.RenderCard(Carder.Instance.CurrentCard);
         if(mod==0)
         GoToExclusive(0);
