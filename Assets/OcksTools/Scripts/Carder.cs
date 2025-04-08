@@ -23,6 +23,8 @@ public class Carder : MonoBehaviour
     public Image bg1;
     public Image bg2;
     public Image bg3;
+    public RectTransform CenteredPos;
+    public RectTransform CenteredHolder;
     public GameObject Sizer;
     public float UpScale = 2f;
     public Sprite sexesex;
@@ -111,6 +113,9 @@ public class Carder : MonoBehaviour
         }
         health.text = aa;
 
+        bool hadany = false;
+
+
         bool a = false;
         var b = RandomFunctions.Instance.StringToList(cum.data["Grid1"]);
         foreach (var c in b)
@@ -136,6 +141,7 @@ public class Carder : MonoBehaviour
                 a = false;
                 goto ppshex1;
             }
+            hadany = true;
             for (int i = 0; i < grid1ers.Count; i++)
             {
                 switch (b[i])
@@ -182,6 +188,7 @@ public class Carder : MonoBehaviour
                 a = false;
                 goto ppshex2;
             }
+            hadany = true;
             for (int i = 0; i < grid2ers.Count; i++)
             {
                 switch (b[i])
@@ -228,6 +235,7 @@ public class Carder : MonoBehaviour
                 a = false;
                 goto ppshex3;
             }
+            hadany = true;
             for (int i = 0; i < grid3ers.Count; i++)
             {
                 switch (b[i])
@@ -249,6 +257,21 @@ public class Carder : MonoBehaviour
         }
         ppshex3:
         grid3.SetActive(a);
+
+
+        if (hadany)
+        {
+            CenteredHolder.position = CenteredPos.position;
+            description.rectTransform.sizeDelta = new Vector2(702.9f, description.rectTransform.sizeDelta.y);
+        }
+        else
+        {
+            var eree = CenteredHolder.localPosition;
+            eree.x = 0;
+            CenteredHolder.localPosition = eree;
+            description.rectTransform.sizeDelta = new Vector2(950, description.rectTransform.sizeDelta.y);
+        }
+
     }
 
 
@@ -258,13 +281,29 @@ public class Carder : MonoBehaviour
         var el = e.ToLower();
         foreach (var ef in Gamer.Instance.ValidEffects)
         {
-            var a = el.AllIndexesOf(ef.Key.ToLower()).ToList();
+            var a = el.AllIndexesOf($"<{ef.Key.ToLower()}>").ToList();
+            for (int i = 0; i < a.Count; i++)
+            {
+                string rep = ef.Key;
+                int j = (a.Count - 1) - i;
+                e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + e.Substring(a[j] + rep.Length+2);
+                el = e.ToLower();
+            }
+            a = el.AllIndexesOf(ef.Key.ToLower()).ToList();
             for(int i = 0; i < a.Count; i++)
             {
                 string rep = ef.Key;
                 int j = (a.Count - 1) - i;
                 rep = rep + FindOtherShits(el.Substring(a[j] + rep.Length));
                 e = e.Substring(0, a[j]) + $"<color=#{ef.Value}>" + rep + "</color>" + e.Substring(a[j] + rep.Length);
+                el = e.ToLower();
+            }
+            a = el.AllIndexesOf($"</>").ToList();
+            for (int i = 0; i < a.Count; i++)
+            {
+                string rep = "</>";
+                int j = (a.Count - 1) - i;
+                e = e.Substring(0, a[j]) + $"</color>" + e.Substring(a[j] + rep.Length);
                 el = e.ToLower();
             }
         }
@@ -369,13 +408,22 @@ public class Card
     {
         Decode(data);
     }
+
+
+
+
+    public const double CurrentCardVer = 6;
+
+
+
+
     private Dictionary<string, string> DefaultValueSet()
     {
         var em = RandomFunctions.Instance.ListToString(new List<string>(81));
 
         return new Dictionary<string, string>()
         {
-            {"OXCRD_Ver" , "5"},
+            {"OXCRD_Ver" , CurrentCardVer.ToString()},
             {"Name" , "Unnamed Card"},
             {"Description" , ""},
             {"Health" , "-"},
@@ -516,6 +564,7 @@ public class Card
                 }
             }
         }
+        data["OXCRD_Ver"] = CurrentCardVer.ToString();
     }
     public string Encode()
     {

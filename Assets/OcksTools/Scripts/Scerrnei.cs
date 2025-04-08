@@ -32,6 +32,7 @@ public class Scerrnei : MonoBehaviour
         byte[] bytes = screenShot.EncodeToPNG();
         var ww = Gamer.Instance.settings["ImageExportPath"] + $"/{Carder.Instance.CurrentCard.data["Name"]}.png";
         System.IO.File.WriteAllBytes(ww, bytes);
+        
         Gamer.Instance.SendNotif($"Rendered Card to \n\"{ww}\"");
         if (e != null) camera.targetTexture = e;
         Carder.Instance.Sizer.transform.localScale = Vector3.one;
